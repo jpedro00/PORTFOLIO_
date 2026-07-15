@@ -61,42 +61,129 @@
     }
     #embers { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
 
-    .moons-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-    .crescent { position: absolute; border-radius: 50%; opacity: 0.82; filter: drop-shadow(0 0 8px rgba(255, 183, 88, 0.45)) drop-shadow(0 0 24px rgba(255, 119, 68, 0.18)); }
-    .crescent::before, .crescent::after { content: ""; position: absolute; border-radius: 50%; }
-    .crescent::before { inset: 0; background: radial-gradient(circle at 34% 34%, rgba(255,244,210,.98) 0%, rgba(255,199,110,.96) 22%, rgba(238,124,73,.86) 46%, rgba(94,54,132,.9) 76%, rgba(20,12,31,.98) 100%); border: 1px solid rgba(255,178,74,.62); }
-    .crescent::after { width: 91%; height: 91%; top: 4%; left: 39%; background: radial-gradient(circle at 30% 42%, rgba(11,8,18,.98), rgba(7,5,12,.98) 65%, transparent 74%); }
-    .crescent.c1 { width: 156px; height: 156px; top: 9%; left: 4%; transform: rotate(-22deg); animation: crescentFloatA 68s ease-in-out infinite; }
-    .crescent.c2 { width: 102px; height: 102px; top: 58%; left: 6%; transform: rotate(18deg); animation: crescentFloatB 84s ease-in-out -8s infinite; }
-    .crescent.c3 { width: 88px; height: 88px; top: 20%; right: 28%; transform: rotate(34deg); animation: crescentFloatC 56s ease-in-out -24s infinite; }
-    .crescent.c4 { width: 184px; height: 184px; right: 10%; bottom: 6%; opacity: 0.66; transform: rotate(205deg); animation: crescentFloatA 104s ease-in-out -20s infinite reverse; }
-    @keyframes crescentFloatA { 0% { transform: translate3d(0, 0, 0) rotate(-22deg); } 50% { transform: translate3d(20vw, -5vh, 0) rotate(120deg); } 100% { transform: translate3d(44vw, 1vh, 0) rotate(300deg); } }
-    @keyframes crescentFloatB { 0% { transform: translate3d(0, 0, 0) rotate(18deg); } 50% { transform: translate3d(58vw, 7vh, 0) rotate(-120deg); } 100% { transform: translate3d(106vw, 0, 0) rotate(-300deg); } }
-    @keyframes crescentFloatC { 0% { transform: translate3d(0, 0, 0) rotate(34deg); } 50% { transform: translate3d(-48vw, -9vh, 0) rotate(180deg); } 100% { transform: translate3d(-96vw, 0, 0) rotate(360deg); } }
+    .moon-definitions {
+      position: absolute;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+    }
 
-    .scroll-eyes { position: fixed; top: 10px; left: 0; z-index: 24; width: 100%; display: flex; align-items: flex-start; justify-content: space-between; padding: 0 clamp(14px, 5vw, 56px); pointer-events: none; }
-    .scroll-eye { width: clamp(44px, 5vw, 82px); opacity: 0; transform: translateY(-28px) scale(0.82); transition: opacity 0.55s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1), filter 0.65s ease; filter: drop-shadow(0 0 8px rgba(179, 22, 47, 0.12)); mix-blend-mode: screen; will-change: transform, opacity; }
-    .scroll-eye:nth-child(odd) { margin-top: 6px; }
-    .scroll-eye.visible { opacity: 0.92; transform: translateY(0) scale(1); filter: drop-shadow(0 0 12px rgba(179, 22, 47, 0.45)) drop-shadow(0 0 22px rgba(201, 169, 97, 0.14)); animation: eyeFloat 7s ease-in-out infinite; }
+    .organic-moon {
+      position: absolute;
+      overflow: visible;
+      opacity: var(--moon-opacity, 0.72);
+      transform: rotate(var(--moon-rotation, 0deg));
+      transform-origin: center;
+      pointer-events: none;
+      filter:
+        drop-shadow(0 0 5px rgba(225, 236, 255, 0.7))
+        drop-shadow(0 0 14px rgba(179, 132, 239, 0.48))
+        drop-shadow(0 0 32px rgba(97, 52, 157, 0.2));
+      animation:
+        organicMoonFloat
+        var(--moon-duration, 18s)
+        ease-in-out
+        var(--moon-delay, 0s)
+        infinite;
+    }
+
+    @keyframes organicMoonFloat {
+      0%,
+      100% {
+        transform:
+          translate3d(0, 0, 0)
+          rotate(var(--moon-rotation, 0deg))
+          scale(1);
+      }
+
+      50% {
+        transform:
+          translate3d(
+            var(--moon-drift-x, 8px),
+            var(--moon-drift-y, -8px),
+            0
+          )
+          rotate(calc(var(--moon-rotation, 0deg) + 8deg))
+          scale(1.04);
+      }
+    }
+
+    .moons-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .bg-moon {
+      width: var(--moon-size);
+      height: var(--moon-size);
+      opacity: var(--moon-opacity);
+    }
+
+    .bg-moon.bm1 { --moon-size: 138px; --moon-opacity: .3; --moon-rotation: -28deg; --moon-duration: 28s; --moon-drift-x: 18px; --moon-drift-y: -12px; top: 7%; left: 3%; }
+    .bg-moon.bm2 { --moon-size: 68px; --moon-opacity: .26; --moon-rotation: 38deg; --moon-duration: 22s; --moon-delay: -6s; --moon-drift-x: -12px; --moon-drift-y: 9px; top: 13%; left: 17%; }
+    .bg-moon.bm3 { --moon-size: 92px; --moon-opacity: .24; --moon-rotation: 118deg; --moon-duration: 26s; --moon-delay: -11s; top: 31%; right: 24%; }
+    .bg-moon.bm4 { --moon-size: 54px; --moon-opacity: .22; --moon-rotation: -72deg; --moon-duration: 19s; --moon-delay: -4s; top: 48%; left: 10%; }
+    .bg-moon.bm5 { --moon-size: 164px; --moon-opacity: .25; --moon-rotation: 198deg; --moon-duration: 34s; --moon-delay: -15s; right: 5%; top: 57%; }
+    .bg-moon.bm6 { --moon-size: 74px; --moon-opacity: .21; --moon-rotation: 14deg; --moon-duration: 24s; --moon-delay: -9s; right: 18%; bottom: 15%; }
+    .bg-moon.bm7 { --moon-size: 108px; --moon-opacity: .23; --moon-rotation: 242deg; --moon-duration: 31s; --moon-delay: -17s; left: 28%; bottom: 7%; }
+    .bg-moon.bm8 { --moon-size: 46px; --moon-opacity: .2; --moon-rotation: 84deg; --moon-duration: 18s; --moon-delay: -3s; left: 48%; top: 18%; }
+
+    .scroll-eyes {
+      position: fixed;
+      top: 9px;
+      left: 50%;
+      z-index: 24;
+      width: min(96vw, 1180px);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: clamp(12px, 2.6vw, 52px);
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    .scroll-eye {
+      width: clamp(38px, 4.25vw, 70px);
+      height: auto;
+      opacity: 0;
+      transform: translateY(-28px) scale(0.82);
+      transition:
+        opacity 0.55s ease,
+        transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+        filter 0.65s ease;
+      filter: drop-shadow(0 0 8px rgba(179, 22, 47, 0.12));
+      mix-blend-mode: screen;
+      will-change: transform, opacity;
+    }
+
+    .scroll-eye:nth-child(1),
+    .scroll-eye:nth-child(6) { margin-top: 7px; }
+
+    .scroll-eye:nth-child(2),
+    .scroll-eye:nth-child(5) { margin-top: 1px; }
+
+    .scroll-eye:nth-child(3),
+    .scroll-eye:nth-child(4) { margin-top: 9px; }
+
+    .scroll-eye.visible {
+      opacity: 0.92;
+      transform: translateY(0) scale(1);
+      filter:
+        drop-shadow(0 0 12px rgba(179, 22, 47, 0.45))
+        drop-shadow(0 0 22px rgba(201, 169, 97, 0.14));
+      animation: eyeFloat 7s ease-in-out infinite;
+    }
+
     .scroll-eye.visible:nth-child(2n) { animation-duration: 8.5s; }
-    @keyframes eyeFloat { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(5px) scale(1.03); } }
 
-    .kokushibo-portrait { position: fixed; top: 0; right: 0; z-index: 3; width: min(38vw, 520px); height: 100vh; pointer-events: none; overflow: hidden; isolation: isolate; }
-    .kokushibo-portrait::before { content: ""; position: absolute; inset: 0; z-index: -2; background: radial-gradient(circle at 78% 30%, rgba(129,17,42,.22), transparent 42%), radial-gradient(circle at 66% 62%, rgba(73,42,112,.16), transparent 48%), linear-gradient(90deg, transparent 0%, rgba(8,6,12,.08) 28%, rgba(8,6,12,.28) 100%); }
-    .kokushibo-aura { position: absolute; top: 12%; right: -8%; width: 110%; height: 72%; z-index: -1; border-radius: 50%; background: radial-gradient(ellipse at center, rgba(179,22,47,.2), rgba(65,34,101,.1) 45%, transparent 72%); filter: blur(38px); }
-    .kokushibo-composition { position: absolute; top: 7%; right: -3%; width: min(100%, 510px); max-height: 92vh; object-fit: contain; object-position: right top; opacity: .82; filter: saturate(.94) contrast(1.08) brightness(.86) drop-shadow(0 0 20px rgba(179,22,47,.22)) drop-shadow(0 0 48px rgba(73,42,112,.14)); mix-blend-mode: screen; animation: portraitFloat 10s ease-in-out infinite; }
-    @keyframes portraitFloat { 0%, 100% { transform: translate3d(0,0,0) scale(1); } 50% { transform: translate3d(-4px,8px,0) scale(1.015); } }
-
-    .portrait-moons { position: absolute; inset: 0; z-index: 3; }
-    .portrait-moon { --moon-rotation: 0deg; position: absolute; border-radius: 50%; opacity: .78; filter: drop-shadow(0 0 7px rgba(255,183,88,.55)) drop-shadow(0 0 20px rgba(255,119,68,.2)); animation: portraitMoonFloat 10s ease-in-out infinite; }
-    .portrait-moon::before, .portrait-moon::after { content: ""; position: absolute; border-radius: 50%; }
-    .portrait-moon::before { inset: 0; background: radial-gradient(circle at 34% 34%, rgba(255,244,210,.98) 0%, rgba(255,199,110,.96) 22%, rgba(238,124,73,.86) 46%, rgba(94,54,132,.9) 76%, rgba(20,12,31,.98) 100%); border: 1px solid rgba(255,178,74,.66); }
-    .portrait-moon::after { width: 91%; height: 91%; top: 4%; left: 39%; background: radial-gradient(circle at 30% 42%, rgba(11,8,18,.98), rgba(7,5,12,.98) 65%, transparent 74%); }
-    .portrait-moon.pm1 { --moon-rotation: -18deg; width: 154px; height: 154px; top: 3%; right: 2%; }
-    .portrait-moon.pm2 { --moon-rotation: 34deg; width: 74px; height: 74px; top: 30%; left: 6%; animation-delay: -2s; }
-    .portrait-moon.pm3 { --moon-rotation: 190deg; width: 112px; height: 112px; right: 5%; bottom: 23%; animation-delay: -4s; }
-    .portrait-moon.pm4 { --moon-rotation: 82deg; width: 58px; height: 58px; left: 22%; bottom: 12%; animation-delay: -6s; }
-    @keyframes portraitMoonFloat { 0%, 100% { transform: translate3d(0,0,0) rotate(var(--moon-rotation)) scale(1); } 50% { transform: translate3d(-5px,7px,0) rotate(calc(var(--moon-rotation) + 7deg)) scale(1.04); } }
+    @keyframes eyeFloat {
+      0%,
+      100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(5px) scale(1.03); }
+    }
 
     main { position: relative; z-index: 2; }
     section { min-height: 100vh; padding: 8vh 8vw; display: flex; flex-direction: column; justify-content: center; position: relative; }
@@ -108,11 +195,12 @@
     .reveal.in { opacity: 1; transform: translateY(0); }
     .reveal.d1 { transition-delay: .1s; } .reveal.d2 { transition-delay: .22s; } .reveal.d3 { transition-delay: .34s; }
 
-    .hero { align-items: flex-start; isolation: isolate; }
-    .hero .moon { position: absolute; top: 8vh; right: 6vw; z-index: -1; width: min(35vw, 400px); aspect-ratio: 1; border-radius: 50%; opacity: 0.96; transform: rotate(-10deg); filter: drop-shadow(0 0 40px rgba(201, 169, 97, 0.12)) drop-shadow(0 0 90px rgba(179, 22, 47, 0.12)); }
-    .hero .moon::before, .hero .moon::after { content: ""; position: absolute; border-radius: 50%; }
-    .hero .moon::before { inset: 0; background: radial-gradient(circle at 34% 34%, rgba(255,244,210,.98) 0%, rgba(255,199,110,.96) 22%, rgba(238,124,73,.86) 46%, rgba(94,54,132,.9) 76%, rgba(20,12,31,.98) 100%); border: 1px solid rgba(255,178,74,.66); }
-    .hero .moon::after { width: 91%; height: 91%; top: 4%; left: 39%; background: radial-gradient(circle at 30% 42%, rgba(11,8,18,.98), rgba(7,5,12,.98) 65%, transparent 74%); }
+    .hero {
+      align-items: flex-start;
+      isolation: isolate;
+      overflow: hidden;
+    }
+
     .hero-kicker { font: 500 13px var(--font-jp); color: var(--gold); letter-spacing: 5px; margin-bottom: 22px; }
     .hero h1 { font-size: clamp(2.6rem, 7vw, 5.4rem); line-height: 1.03; max-width: 14ch; background: linear-gradient(120deg, var(--moon) 40%, var(--gold) 65%, var(--blood-bright)); -webkit-background-clip: text; background-clip: text; color: transparent; }
     .hero p.role { font-weight: 300; font-size: clamp(1.1rem, 2vw, 1.4rem); color: var(--text-dim); margin-top: 22px; max-width: 46ch; }
@@ -127,16 +215,143 @@
     @keyframes dropline { 0% { opacity: 0; transform: translateY(-6px); } 50% { opacity: 1; } 100% { opacity: 0; transform: translateY(6px); } }
 
     .kanji-mark { position: absolute; font-family: var(--font-jp); font-weight: 700; font-size: min(22vw, 260px); color: rgba(122,12,31,.06); top: 50%; right: 0; transform: translateY(-50%); pointer-events: none; user-select: none; line-height: 1; }
+
+    .facts-band {
+      min-height: auto;
+      padding-top: 36px;
+      padding-bottom: 90px;
+    }
+
+    .facts-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border-top: 1px solid rgba(201, 169, 97, 0.18);
+      border-left: 1px solid rgba(201, 169, 97, 0.18);
+    }
+
+    .fact-card {
+      min-height: 220px;
+      padding: 30px 26px;
+      border-right: 1px solid rgba(201, 169, 97, 0.18);
+      border-bottom: 1px solid rgba(201, 169, 97, 0.18);
+      background: linear-gradient(145deg, rgba(122, 12, 31, 0.045), rgba(26, 14, 46, 0.04));
+    }
+
+    .fact-index {
+      display: block;
+      margin-bottom: 34px;
+      font: 500 10px var(--font-jp);
+      letter-spacing: 2px;
+      color: var(--gold-dim);
+    }
+
+    .fact-card strong {
+      display: block;
+      margin-bottom: 10px;
+      font-family: var(--font-display);
+      font-size: 1.12rem;
+      color: var(--moon);
+    }
+
+    .fact-card p {
+      color: var(--text-dim);
+      font-size: 0.92rem;
+      font-weight: 300;
+    }
+
     .about-grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: 60px; align-items: start; }
     .about-grid p { color: var(--text-dim); font-weight: 300; font-size: 1.05rem; margin-bottom: 18px; max-width: 52ch; }
     .about-grid strong { color: var(--moon); font-weight: 500; }
+    .about-grid .about-lead { max-width: 44ch; margin-top: 24px; color: var(--text-dim); font-size: 1rem; font-weight: 300; }
     .about-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
     .tag { font: 500 11px var(--font-jp); letter-spacing: 1px; color: var(--gold); border: 1px solid var(--gold-dim); padding: 7px 14px; border-radius: 2px; }
+
+    .section-intro {
+      max-width: 64ch;
+      margin-top: 18px;
+      margin-bottom: 42px;
+      color: var(--text-dim);
+      font-weight: 300;
+    }
+
+    .stack-groups {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2px;
+      margin-bottom: 46px;
+    }
+
+    .stack-group {
+      min-height: 250px;
+      padding: 34px;
+      border: 1px solid rgba(201, 169, 97, 0.18);
+      background: linear-gradient(145deg, rgba(122, 12, 31, 0.055), rgba(26, 14, 46, 0.035));
+    }
+
+    .stack-number {
+      display: block;
+      margin-bottom: 38px;
+      font-family: var(--font-display);
+      color: var(--gold-dim);
+    }
+
+    .stack-group h3 { margin-bottom: 12px; font-size: 1.3rem; }
+    .stack-group p { max-width: 52ch; color: var(--text-dim); font-size: 0.96rem; font-weight: 300; }
 
     .skills-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 2px; margin-top: 20px; border-top: 1px solid rgba(201,169,97,.15); }
     .skill-row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 20px 4px; border-bottom: 1px solid rgba(201,169,97,.15); }
     .skill-row .n { font-family: var(--font-display); font-size: 1.05rem; }
     .skill-row .lvl { font: 500 11px var(--font-jp); color: var(--gold-dim); letter-spacing: 1px; white-space: nowrap; }
+
+    .timeline {
+      margin-top: 54px;
+      border-top: 1px solid rgba(201, 169, 97, 0.18);
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: minmax(190px, 0.42fr) 1.4fr;
+      gap: clamp(28px, 7vw, 100px);
+      padding: 48px 0;
+      border-bottom: 1px solid rgba(201, 169, 97, 0.18);
+    }
+
+    .timeline-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      font: 500 11px var(--font-jp);
+      letter-spacing: 2px;
+      color: var(--gold);
+    }
+
+    .timeline-meta small { color: var(--gold-dim); font-size: 9px; }
+    .timeline-type { display: block; margin-bottom: 12px; font: 500 10px var(--font-jp); letter-spacing: 2px; color: var(--gold-dim); }
+    .timeline-content h3 { margin-bottom: 16px; font-size: clamp(1.25rem, 2.4vw, 1.7rem); }
+    .timeline-content p { max-width: 66ch; color: var(--text-dim); font-weight: 300; }
+
+    .detail-list {
+      display: grid;
+      gap: 9px;
+      margin-top: 22px;
+      list-style: none;
+    }
+
+    .detail-list li {
+      position: relative;
+      padding-left: 22px;
+      color: var(--text-dim);
+      font-size: 0.94rem;
+    }
+
+    .detail-list li::before {
+      content: "◐";
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: var(--gold);
+      font-size: 0.72rem;
+    }
 
     .proj-list { display: flex; flex-direction: column; gap: 2px; margin-top: 10px; }
     .proj-card { border: 1px solid rgba(201,169,97,.18); padding: 38px clamp(20px,4vw,48px); display: grid; grid-template-columns: 70px 1fr auto; gap: 28px; align-items: center; transition: background .4s ease, border-color .4s ease; position: relative; overflow: hidden; }
@@ -154,6 +369,52 @@
     .proj-card:nth-child(even) { direction: rtl; }
     .proj-card:nth-child(even) > * { direction: ltr; }
 
+    .project-points {
+      display: grid;
+      gap: 7px;
+      margin-top: 18px;
+      list-style: none;
+    }
+
+    .project-points li {
+      position: relative;
+      padding-left: 19px;
+      color: var(--text-dim);
+      font-size: 0.88rem;
+      font-weight: 300;
+    }
+
+    .project-points li::before {
+      content: "—";
+      position: absolute;
+      left: 0;
+      color: var(--gold-dim);
+    }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 2px;
+      margin-top: 30px;
+    }
+
+    .process-card {
+      min-height: 310px;
+      padding: 34px 28px;
+      border: 1px solid rgba(201, 169, 97, 0.18);
+      background: linear-gradient(155deg, rgba(122, 12, 31, 0.065), rgba(26, 14, 46, 0.03));
+    }
+
+    .process-index {
+      display: block;
+      margin-bottom: 56px;
+      font-family: var(--font-display);
+      color: var(--gold-dim);
+    }
+
+    .process-card h3 { margin-bottom: 14px; font-size: 1.28rem; }
+    .process-card p { color: var(--text-dim); font-size: 0.92rem; font-weight: 300; }
+
     .links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2px; margin-top: 10px; }
     .link-card { border: 1px solid rgba(201,169,97,.18); padding: 32px 28px; min-height: 210px; text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 10px; transition: background .4s ease, border-color .4s ease, transform .4s ease; position: relative; }
     .link-card:hover { background: rgba(122,12,31,.1); border-color: var(--gold-dim); transform: translateY(-4px); }
@@ -167,6 +428,23 @@
     .awaken h2 { font-size: clamp(2rem, 5vw, 3.4rem); max-width: 16ch; margin: 0 auto; }
     .awaken p { color: var(--text-dim); font-weight: 300; max-width: 44ch; margin: 22px auto 0; }
     .awaken .cta-row { justify-content: center; margin-top: 40px; }
+
+    .contact-notes {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .contact-notes span {
+      padding: 8px 13px;
+      border: 1px solid rgba(201, 169, 97, 0.2);
+      color: var(--gold);
+      font: 500 10px var(--font-jp);
+      letter-spacing: 1px;
+    }
+
     footer { padding: 40px 8vw; text-align: center; font: 500 11px var(--font-jp); color: var(--gold-dim); letter-spacing: 2px; position: relative; z-index: 2; }
 
     .intro-overlay { position: fixed; inset: 0; z-index: 9999; background: var(--void); display: flex; align-items: center; justify-content: center; flex-direction: column; transition: opacity 1s ease .1s, visibility 1s ease .1s; }
@@ -176,7 +454,14 @@
     .intro-overlay.play .intro-slash { animation: slashDraw 1.15s ease forwards; opacity: 1; }
     .intro-overlay.play .s1 { animation-delay: .05s; } .intro-overlay.play .s2 { animation-delay: .3s; } .intro-overlay.play .s3 { animation-delay: .55s; }
     @keyframes slashDraw { to { stroke-dashoffset: 0; } }
-    .intro-moon { fill: var(--gold); opacity: 0; transform-origin: 150px 150px; filter: drop-shadow(0 0 22px rgba(201,169,97,.75)); }
+    .intro-moon {
+      fill: #b894ee;
+      opacity: 0;
+      transform-origin: 150px 150px;
+      filter:
+        drop-shadow(0 0 10px rgba(221, 234, 255, 0.8))
+        drop-shadow(0 0 24px rgba(157, 98, 226, 0.72));
+    }
     .intro-overlay.play .intro-moon { animation: moonRise 1.3s ease .95s forwards; }
     @keyframes moonRise { 0% { opacity: 0; transform: scale(.35); } 65% { opacity: 1; transform: scale(1.15); } 100% { opacity: 1; transform: scale(1); } }
     .intro-label { margin-top: 28px; font: 500 11px var(--font-jp); letter-spacing: 6px; color: var(--gold-dim); opacity: 0; }
@@ -185,17 +470,35 @@
     .intro-skip { position: absolute; bottom: 6vh; padding: 8px; font: 500 10px var(--font-jp); letter-spacing: 2px; color: var(--gold-dim); background: none; border: 0; cursor: pointer; opacity: .65; transition: opacity .3s ease; }
     .intro-skip:hover { opacity: 1; }
 
-    @media (max-width: 1400px) { .kokushibo-portrait { width: min(35vw, 480px); } }
-    @media (max-width: 1100px) { .kokushibo-portrait { width: min(42vw, 430px); z-index: 1; } .kokushibo-composition { opacity: .65; } }
-    @media (max-width: 980px) { .scroll-eye { width: clamp(36px, 7vw, 64px); } }
-    @media (max-width: 820px) { .about-grid { grid-template-columns: 1fr; gap: 32px; } .kokushibo-portrait { width: 46vw; z-index: 1; } .kokushibo-composition { top: 18%; opacity: .48; } .portrait-moon.pm1 { width: 112px; height: 112px; } .portrait-moon.pm3 { width: 84px; height: 84px; } }
+    @media (max-width: 1100px) {
+      .kokushibo-portrait { width: min(44vw, 520px); }
+      .facts-grid,
+      .process-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 820px) {
+      .about-grid { grid-template-columns: 1fr; gap: 32px; }
+      .kokushibo-portrait { width: 51vw; opacity: 0.74; }
+      .kokushibo-image-stage { right: -15%; }
+      .stack-groups { grid-template-columns: 1fr; }
+      .timeline-item { grid-template-columns: 1fr; gap: 22px; }
+    }
+
     @media (max-width: 700px) {
       section { min-height: auto; padding: 110px 6vw; }
       .hero { min-height: 100svh; justify-content: center; padding-bottom: 130px; }
-      .hero .moon { top: 12vh; right: -12vw; width: 76vw; opacity: 0.52; }
-      .scroll-eyes { top: 8px; padding: 0 10px; }
-      .kokushibo-portrait { top: auto; bottom: 0; width: 58vw; height: 76vh; opacity: .68; }
-      .kokushibo-composition { top: auto; right: -10%; bottom: 0; width: 100%; opacity: .32; }
+      .kokushibo-portrait { top: auto; right: -4vw; bottom: 0; width: 68vw; height: 76%; opacity: 0.5; }
+      .scroll-eyes { top: 7px; width: 98vw; gap: 7px; }
+      .scroll-eye { width: clamp(28px, 8vw, 40px); }
+      .facts-band { padding-top: 40px; padding-bottom: 80px; }
+      .facts-grid,
+      .process-grid { grid-template-columns: 1fr; }
+      .fact-card,
+      .process-card { min-height: auto; }
+      .process-card { padding-bottom: 42px; }
+      .process-index { margin-bottom: 28px; }
+      .portrait-moon.pm1 { --moon-size: 98px; }
+      .portrait-moon.pm3 { --moon-size: 72px; }
       .hero h1 { font-size: clamp(2.3rem, 12vw, 4rem); }
       .hero-kicker { font-size: 10px; letter-spacing: 3px; }
       .proj-card, .proj-card:nth-child(even) { grid-template-columns: 1fr; direction: ltr; }
@@ -205,14 +508,1108 @@
       .btn { width: 100%; justify-content: center; }
       .scroll-hint { left: 6vw; }
     }
-    @media (max-width: 420px) { .skill-row { flex-direction: column; gap: 4px; } .link-card { min-height: 190px; } .scroll-eye { width: 34px; } .kokushibo-portrait { width: 62vw; opacity: .54; } .kokushibo-composition { opacity: .24; } .portrait-moon.pm2, .portrait-moon.pm4 { display: none; } }
+
+    @media (max-width: 420px) {
+      .skill-row { flex-direction: column; gap: 4px; }
+      .link-card { min-height: 190px; }
+      .scroll-eye { width: 27px; }
+      .kokushibo-portrait { width: 76vw; opacity: 0.42; }
+    }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
       .reveal { opacity: 1; transform: none; }
     }
+
+    :root {
+      --cycle-moon-opacity: 1;
+      --cycle-ambient-opacity: 1;
+      --cycle-ember-opacity: 1;
+      --cycle-portrait-opacity: 1;
+    }
+
+    html[data-cycle="day"] {
+      --cycle-moon-opacity: .58;
+      --cycle-ambient-opacity: .72;
+      --cycle-ember-opacity: .5;
+      --cycle-portrait-opacity: .84;
+    }
+
+    html[data-cycle="night"] {
+      --cycle-moon-opacity: 1;
+      --cycle-ambient-opacity: 1;
+      --cycle-ember-opacity: 1;
+      --cycle-portrait-opacity: 1;
+    }
+
+    .ambient { opacity: var(--cycle-ambient-opacity); transition: opacity 1.2s ease; }
+    #embers { opacity: var(--cycle-ember-opacity); transition: opacity 1.2s ease; }
+    .moons-bg,
+    .portrait-moons { opacity: var(--cycle-moon-opacity); transition: opacity 1.2s ease; }
+    .bg-moon { opacity: calc(var(--moon-opacity) * .72); }
+
+    .scroll-eyes { top: 8px; gap: clamp(10px, 2.5vw, 50px); }
+    .scroll-eye { width: clamp(36px, 4.15vw, 68px); }
+    .scroll-eye.visible {
+      opacity: .9;
+      filter:
+        drop-shadow(0 0 11px rgba(179, 22, 47, .4))
+        drop-shadow(0 0 21px rgba(201, 169, 97, .13));
+    }
+
+    .site-header {
+      position: fixed;
+      top: 77px;
+      left: 50%;
+      z-index: 22;
+      width: min(91vw, 1140px);
+      min-height: 52px;
+      padding: 0 18px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      transform: translateX(-50%);
+      border: 1px solid rgba(201, 169, 97, .12);
+      background: rgba(8, 6, 12, .46);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 16px 50px rgba(0, 0, 0, .2), inset 0 1px rgba(255, 255, 255, .025);
+      transition: background .35s ease, border-color .35s ease;
+    }
+
+    .site-header.scrolled {
+      background: rgba(8, 6, 12, .8);
+      border-color: rgba(201, 169, 97, .2);
+    }
+
+    .site-brand {
+      flex-shrink: 0;
+      color: var(--moon);
+      font-family: var(--font-display);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .site-brand span { color: var(--blood-bright); }
+
+    .site-nav {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: clamp(13px, 2vw, 30px);
+    }
+
+    .site-nav a {
+      position: relative;
+      padding: 16px 0;
+      color: var(--text-dim);
+      font: 500 9px var(--font-jp);
+      letter-spacing: 1.35px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: color .3s ease;
+    }
+
+    .site-nav a::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: 10px;
+      left: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--blood-bright), #8659cf, var(--gold));
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform .35s ease;
+    }
+
+    .site-nav a:hover,
+    .site-nav a.active { color: var(--moon); }
+    .site-nav a:hover::after,
+    .site-nav a.active::after { transform: scaleX(1); transform-origin: left; }
+
+    .site-progress {
+      position: absolute;
+      right: 0;
+      bottom: -1px;
+      left: 0;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    .site-progress span {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--blood-bright), #7f56c9, var(--gold));
+      transform: scaleX(0);
+      transform-origin: left;
+      will-change: transform;
+    }
+
+    section { padding-top: 10vh; padding-bottom: 10vh; scroll-margin-top: 150px; }
+
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity .9s ease, transform .9s cubic-bezier(.22, 1, .36, 1);
+    }
+
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity .9s ease, transform .9s cubic-bezier(.22, 1, .36, 1);
+    }
+
+    .reveal-mask {
+      opacity: 0;
+      clip-path: inset(0 100% 0 0);
+      transition: opacity .4s ease, clip-path 1.05s cubic-bezier(.22, 1, .36, 1);
+    }
+
+    .reveal-left.in,
+    .reveal-right.in { opacity: 1; transform: translateX(0); }
+    .reveal-mask.in { opacity: 1; clip-path: inset(0 0 0 0); }
+
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      padding-top: 170px;
+      align-items: flex-start;
+      isolation: isolate;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background: linear-gradient(90deg, transparent 0%, transparent 50%, rgba(8, 6, 12, .08) 64%, rgba(8, 6, 12, .32) 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 6;
+      width: min(58vw, 820px);
+    }
+
+    .kokushibo-portrait {
+      position: absolute;
+      top: 0;
+      right: -2.5vw;
+      z-index: 1;
+      width: min(40vw, 630px);
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+      isolation: isolate;
+      filter: opacity(var(--cycle-portrait-opacity));
+    }
+
+    .kokushibo-portrait::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, var(--void) 0%, rgba(8, 6, 12, .92) 6%, rgba(8, 6, 12, .54) 18%, rgba(8, 6, 12, .14) 38%, transparent 58%),
+        linear-gradient(180deg, rgba(8, 6, 12, .55) 0%, transparent 19%, transparent 77%, rgba(8, 6, 12, .8) 100%);
+    }
+
+    .kokushibo-aura {
+      position: absolute;
+      top: 5%;
+      right: -22%;
+      z-index: -1;
+      width: 138%;
+      height: 94%;
+      background: radial-gradient(ellipse at center, rgba(143, 19, 54, .18), rgba(85, 46, 134, .1) 44%, transparent 73%);
+      filter: blur(58px);
+      border-radius: 50%;
+    }
+
+    .kokushibo-image-stage {
+      position: absolute;
+      top: 0;
+      right: -5%;
+      width: 112%;
+      height: 100%;
+      overflow: hidden;
+      transform: scaleX(-1);
+      transform-origin: center;
+      -webkit-mask-image:
+        linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, .08) 8%, rgba(0, 0, 0, .72) 24%, #000 45%, #000 94%, transparent 100%),
+        linear-gradient(180deg, transparent 0%, #000 8%, #000 88%, transparent 100%);
+      mask-image:
+        linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, .08) 8%, rgba(0, 0, 0, .72) 24%, #000 45%, #000 94%, transparent 100%),
+        linear-gradient(180deg, transparent 0%, #000 8%, #000 88%, transparent 100%);
+      -webkit-mask-composite: source-in;
+      mask-composite: intersect;
+    }
+
+    .kokushibo-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: right center;
+      transform-origin: 68% 48%;
+    }
+
+    .kokushibo-layer-blur {
+      z-index: 0;
+      opacity: .18;
+      transform: scale(1.085);
+      filter: blur(30px) saturate(.62) brightness(.52) drop-shadow(0 0 50px rgba(179, 22, 47, .18));
+    }
+
+    .kokushibo-layer-main {
+      z-index: 1;
+      opacity: .38;
+      filter:
+        blur(1.35px)
+        saturate(.64)
+        contrast(1.06)
+        brightness(.55)
+        drop-shadow(0 0 20px rgba(179, 22, 47, .13))
+        drop-shadow(0 0 48px rgba(91, 53, 151, .1));
+      animation: portraitBreathing 10s ease-in-out infinite;
+    }
+
+    @keyframes portraitBreathing {
+      0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(-3px, 6px, 0) scale(1.01); }
+    }
+
+    .portrait-moons {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+    }
+    .portrait-moon {
+      width: var(--moon-size);
+      height: var(--moon-size);
+      opacity: .32;
+      filter:
+        blur(.35px)
+        drop-shadow(0 0 8px rgba(210, 220, 255, .4))
+        drop-shadow(0 0 20px rgba(137, 89, 213, .25));
+    }
+
+    .portrait-moon.pm1 {
+      --moon-size: 132px;
+      --moon-rotation: -24deg;
+      --moon-duration: 13s;
+      top: 3%;
+      right: -3%;
+    }
+    .portrait-moon.pm2 {
+      --moon-size: 68px;
+      --moon-rotation: 47deg;
+      --moon-duration: 11s;
+      --moon-delay: -3s;
+      top: 35%;
+      left: 7%;
+    }
+    .portrait-moon.pm3 {
+      --moon-size: 82px;
+      --moon-rotation: 205deg;
+      --moon-duration: 14s;
+      --moon-delay: -7s;
+      right: 8%;
+      top: auto;
+      bottom: 10%;
+    }
+
+    .lunar-blob {
+      position: absolute;
+      left: 44%;
+      bottom: -24%;
+      z-index: 0;
+      width: min(44vw, 620px);
+      aspect-ratio: 1.15;
+      border: 1px solid rgba(139, 91, 210, .1);
+      border-radius: 44% 56% 61% 39% / 47% 35% 65% 53%;
+      background: radial-gradient(circle at 45% 40%, rgba(112, 69, 172, .12), rgba(122, 12, 31, .07) 45%, transparent 72%);
+      filter: blur(8px);
+      animation: blobBreathe 18s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes blobBreathe {
+      50% {
+        transform: scale(1.05) rotate(5deg);
+        border-radius: 57% 43% 38% 62% / 42% 59% 41% 58%;
+      }
+    }
+
+    .hero-discipline {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 24px;
+      color: var(--text-dim);
+      font-size: .92rem;
+    }
+
+    .discipline-window { display: inline-flex; min-width: 185px; overflow: hidden; }
+    .discipline-window strong {
+      color: var(--gold);
+      font: 500 12px var(--font-jp);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: opacity .28s ease, transform .28s ease;
+    }
+    .discipline-window strong.changing { opacity: 0; transform: translateY(12px); }
+
+    .moon-phase-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 24px;
+      padding: 8px 12px;
+      border: 1px solid rgba(201, 169, 97, .16);
+      background: rgba(8, 6, 12, .44);
+      color: var(--gold-dim);
+      font: 500 9px var(--font-jp);
+      letter-spacing: 1.2px;
+      backdrop-filter: blur(10px);
+    }
+
+    .moon-phase-glyph {
+      font-size: 1rem;
+      filter: drop-shadow(0 0 7px rgba(159, 114, 224, .5));
+    }
+
+    .counter-band {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-right: 1px solid rgba(201, 169, 97, .18);
+      border-bottom: 1px solid rgba(201, 169, 97, .18);
+      border-left: 1px solid rgba(201, 169, 97, .18);
+    }
+
+    .counter-item {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      padding: 24px 26px;
+      border-right: 1px solid rgba(201, 169, 97, .18);
+    }
+
+    .counter-item:last-child { border-right: 0; }
+    .counter-num {
+      color: var(--gold);
+      font: 700 clamp(1.8rem, 3vw, 2.8rem) var(--font-display);
+    }
+    .counter-label { color: var(--text-dim); font-size: .84rem; }
+
+    .story-section { align-items: stretch; }
+    .story-heading {
+      max-width: 900px;
+      margin-bottom: clamp(54px, 9vw, 110px);
+    }
+
+    .story-layout {
+      display: grid;
+      grid-template-columns: minmax(230px, .55fr) minmax(0, 1.25fr);
+      gap: clamp(50px, 9vw, 130px);
+    }
+
+    .story-aside {
+      position: sticky;
+      top: 170px;
+      align-self: start;
+      padding-left: 20px;
+      border-left: 1px solid rgba(201, 169, 97, .28);
+    }
+
+    .story-label {
+      display: block;
+      margin-bottom: 22px;
+      color: var(--gold);
+      font: 500 10px var(--font-jp);
+      letter-spacing: 3px;
+    }
+
+    .story-aside p {
+      color: var(--text-dim);
+      font-size: .96rem;
+      font-weight: 300;
+    }
+
+    .story-location {
+      display: grid;
+      gap: 7px;
+      margin-top: 30px;
+      color: var(--gold-dim);
+      font: 500 10px var(--font-jp);
+      letter-spacing: 1px;
+    }
+
+    .story-copy {
+      display: grid;
+      gap: 30px;
+    }
+
+    .story-copy p {
+      max-width: 65ch;
+      margin: 0;
+      color: var(--text-dim);
+      font-size: clamp(1rem, 1.45vw, 1.18rem);
+      font-weight: 300;
+      line-height: 1.9;
+    }
+
+    .story-copy .story-lead {
+      color: var(--moon);
+      font-size: clamp(1.2rem, 2.1vw, 1.65rem);
+      line-height: 1.65;
+    }
+
+    .story-quote {
+      max-width: 58ch;
+      margin-top: 24px;
+      padding: 30px;
+      border: 1px solid rgba(201, 169, 97, .18);
+      border-left: 2px solid var(--blood-bright);
+      background: linear-gradient(135deg, rgba(122, 12, 31, .09), rgba(26, 14, 46, .05));
+      color: var(--moon);
+      font-family: var(--font-display);
+      font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+      line-height: 1.7;
+    }
+
+    .chapters {
+      position: relative;
+      margin-top: 70px;
+      padding-left: 74px;
+      --chapter-progress: 0%;
+    }
+
+    .chapters-line,
+    .chapters-progress {
+      position: absolute;
+      top: 0;
+      left: 22px;
+      width: 1px;
+    }
+
+    .chapters-line {
+      bottom: 0;
+      background: rgba(201, 169, 97, .13);
+    }
+
+    .chapters-progress {
+      height: var(--chapter-progress);
+      background: linear-gradient(var(--blood-bright), #8b5bd2, var(--gold));
+      box-shadow: 0 0 12px rgba(139, 91, 210, .25);
+    }
+
+    .chapter {
+      position: relative;
+      min-height: 190px;
+      padding: 16px 0 46px;
+      border-bottom: 1px solid rgba(201, 169, 97, .15);
+    }
+
+    .chapter::before {
+      content: "";
+      position: absolute;
+      top: 24px;
+      left: -57px;
+      width: 11px;
+      height: 11px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      background: var(--void);
+      box-shadow: 0 0 12px rgba(139, 91, 210, .32);
+    }
+
+    .chapter-tag,
+    .chapter-year {
+      display: inline-block;
+      margin: 0 12px 12px 0;
+      color: var(--gold-dim);
+      font: 500 10px var(--font-jp);
+      letter-spacing: 2px;
+    }
+
+    .chapter-year { color: var(--gold); }
+    .chapter h3 {
+      margin-bottom: 12px;
+      font-size: clamp(1.25rem, 2.3vw, 1.75rem);
+    }
+    .chapter p {
+      max-width: 67ch;
+      color: var(--text-dim);
+      font-weight: 300;
+    }
+
+    .skills-marquee {
+      position: relative;
+      z-index: 3;
+      width: 100%;
+      overflow: hidden;
+      padding: 22px 0;
+      border-top: 1px solid rgba(201, 169, 97, .16);
+      border-bottom: 1px solid rgba(201, 169, 97, .16);
+      background: rgba(8, 6, 12, .6);
+    }
+
+    .skills-marquee-track {
+      display: flex;
+      align-items: center;
+      gap: 34px;
+      width: max-content;
+      animation: marqueeMove 34s linear infinite;
+    }
+
+    .skills-marquee span {
+      color: var(--moon);
+      font: 600 13px var(--font-jp);
+      letter-spacing: 4px;
+    }
+
+    .skills-marquee i { color: #9a70d8; font-style: normal; }
+    @keyframes marqueeMove { to { transform: translateX(-50%); } }
+
+    .constellation-map {
+      position: relative;
+      width: 100%;
+      min-height: 540px;
+      margin-top: 60px;
+      overflow: hidden;
+      border: 1px solid rgba(201, 169, 97, .15);
+      background:
+        radial-gradient(circle at 50% 48%, rgba(89, 52, 145, .09), transparent 55%),
+        rgba(8, 6, 12, .28);
+    }
+
+    .constellation-lines {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .constellation-lines line {
+      stroke: rgba(201, 169, 97, .54);
+      stroke-width: 1;
+      filter: drop-shadow(0 0 4px rgba(201, 169, 97, .32));
+      transition: stroke-dashoffset 1.2s cubic-bezier(.22, 1, .36, 1);
+    }
+
+    .constellation-node {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--text-dim);
+      font: 500 10px var(--font-jp);
+      letter-spacing: 1px;
+      transform: translate(-50%, -50%);
+    }
+
+    .constellation-node span {
+      width: 11px;
+      height: 11px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      background: var(--void);
+      box-shadow: 0 0 7px rgba(201, 169, 97, .62), 0 0 18px rgba(126, 82, 197, .18);
+    }
+
+    .node-react { left: 14%; top: 27%; }
+    .node-ts { left: 34%; top: 14%; }
+    .node-node { left: 57%; top: 28%; }
+    .node-supabase { left: 79%; top: 16%; }
+    .node-postgres { left: 85%; top: 62%; }
+    .node-web3 { left: 58%; top: 79%; }
+    .node-git { left: 30%; top: 72%; }
+    .node-deploy { left: 14%; top: 52%; }
+
+    .constellation-map.constellation-drawn
+    .constellation-lines line {
+      stroke-dashoffset: 0 !important;
+    }
+
+    .constellation-map.constellation-drawn
+    .constellation-node span {
+      animation: constellationPulse 2.4s ease-in-out infinite;
+    }
+
+    @keyframes constellationPulse {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 7px rgba(201, 169, 97, .5);
+      }
+      50% {
+        transform: scale(1.18);
+        box-shadow: 0 0 13px rgba(201, 169, 97, .72), 0 0 24px rgba(126, 82, 197, .22);
+      }
+    }
+
+    .proj-card {
+      isolation: isolate;
+      transition:
+        transform .45s cubic-bezier(.22, 1, .36, 1),
+        border-color .4s ease,
+        background .4s ease;
+    }
+
+    .proj-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      opacity: 0;
+      background:
+        radial-gradient(circle at 82% 22%, rgba(126, 78, 196, .13), transparent 40%),
+        linear-gradient(135deg, rgba(122, 12, 31, .07), transparent 58%);
+      transition: opacity .4s ease;
+    }
+
+    .proj-card::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 2px;
+      background: linear-gradient(var(--blood-bright), #8b5bd2, var(--gold));
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform .45s ease;
+    }
+
+    .proj-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(201, 169, 97, .4);
+      background: transparent;
+    }
+    .proj-card:hover::before { opacity: 1; }
+    .proj-card:hover::after { transform: scaleY(1); transform-origin: top; }
+    .proj-index { transition: color .35s ease, transform .35s ease; }
+    .proj-card:hover .proj-index { color: var(--gold); transform: translateX(4px); }
+
+    .techniques-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 2px;
+      margin-top: 30px;
+    }
+
+    .technique-card {
+      position: relative;
+      min-height: 330px;
+      padding: 34px 28px;
+      overflow: hidden;
+      border: 1px solid rgba(201, 169, 97, .18);
+      background: linear-gradient(155deg, rgba(122, 12, 31, .065), rgba(26, 14, 46, .03));
+    }
+
+    .technique-index {
+      display: block;
+      min-height: 36px;
+      margin-bottom: 42px;
+      color: var(--gold-dim);
+      font: 500 10px var(--font-jp);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .technique-card h3 { margin-bottom: 14px; font-size: 1.18rem; }
+    .technique-card p { color: var(--text-dim); font-size: .9rem; font-weight: 300; }
+    .technique-card .mini-moon {
+      right: -6px;
+      bottom: -8px;
+      width: 70px;
+      height: 70px;
+      opacity: .22;
+    }
+
+    .inspiration-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2px;
+      margin-top: 48px;
+    }
+
+    .inspiration-card {
+      padding: 28px;
+      border: 1px solid rgba(201, 169, 97, .15);
+    }
+
+    .inspiration-card h3 { margin-bottom: 10px; font-size: 1.05rem; }
+    .inspiration-card p { color: var(--text-dim); font-size: .9rem; font-weight: 300; }
+
+    .faq-list {
+      max-width: 920px;
+      margin-top: 50px;
+      border-top: 1px solid rgba(201, 169, 97, .18);
+    }
+
+    .faq-item { border-bottom: 1px solid rgba(201, 169, 97, .18); }
+
+    .faq-question {
+      width: 100%;
+      padding: 25px 0;
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      border: 0;
+      background: transparent;
+      color: var(--moon);
+      font-family: var(--font-display);
+      font-size: clamp(1rem, 1.7vw, 1.22rem);
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .faq-question span:last-child {
+      color: var(--gold);
+      transition: transform .3s ease;
+    }
+
+    .faq-question[aria-expanded="true"] span:last-child { transform: rotate(45deg); }
+    .faq-answer {
+      max-width: 74ch;
+      padding: 0 0 25px;
+      color: var(--text-dim);
+      font-weight: 300;
+    }
+    .faq-answer[hidden] { display: none; }
+
+    .burn-seal-link { position: relative; overflow: visible; }
+    .burn-seal {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      z-index: 5;
+      display: grid;
+      place-items: center;
+      width: 58px;
+      height: 58px;
+      border: 1px solid rgba(255, 77, 82, .75);
+      border-radius: 50%;
+      color: #ff4b54;
+      background: rgba(45, 0, 8, .8);
+      font: 700 25px var(--font-jp);
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(.45) rotate(-12deg);
+      pointer-events: none;
+    }
+    .burn-seal-link.sealing .burn-seal { animation: burnSeal .4s ease forwards; }
+
+    @keyframes burnSeal {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(.42) rotate(-12deg);
+      }
+      42% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.15) rotate(0);
+        box-shadow: 0 0 18px rgba(255, 25, 45, .82), 0 0 44px rgba(179, 22, 47, .5);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.42) rotate(7deg);
+      }
+    }
+
+    footer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 18px 30px;
+      padding-bottom: 60px;
+    }
+
+    .sound-toggle {
+      padding: 8px 11px;
+      border: 1px solid rgba(201, 169, 97, .2);
+      background: transparent;
+      color: var(--gold-dim);
+      font: 500 9px var(--font-jp);
+      letter-spacing: 1px;
+      cursor: pointer;
+    }
+
+    .click-ripple {
+      position: fixed;
+      z-index: 18000;
+      width: 16px;
+      height: 16px;
+      border: 1px solid rgba(201, 169, 97, .85);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%) scale(0);
+      box-shadow: 0 0 8px rgba(179, 22, 47, .6), inset 0 0 8px rgba(201, 169, 97, .35);
+      animation: clickRippleExpand .72s ease-out forwards;
+    }
+
+    @keyframes clickRippleExpand {
+      0% { opacity: .9; transform: translate(-50%, -50%) scale(.2); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(8); }
+    }
+
+    .journey-toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 19000;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      max-width: 280px;
+      padding: 15px 18px;
+      border: 1px solid rgba(201, 169, 97, .24);
+      background: rgba(8, 6, 12, .88);
+      color: var(--moon);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 15px 48px rgba(0, 0, 0, .38), 0 0 28px rgba(122, 12, 31, .14);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(18px);
+      transition: opacity .45s ease, transform .45s ease, visibility .45s ease;
+    }
+
+    .journey-toast.visible { opacity: 1; visibility: visible; transform: translateY(0); }
+    .journey-toast > span { color: var(--blood-bright); font: 700 25px var(--font-jp); }
+    .journey-toast div { display: grid; gap: 2px; }
+    .journey-toast strong { font-family: var(--font-display); font-size: .9rem; }
+    .journey-toast small { color: var(--text-dim); font-size: .72rem; }
+
+    .true-form-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 20000;
+      display: grid;
+      place-items: center;
+      visibility: hidden;
+      opacity: 0;
+      overflow: hidden;
+      pointer-events: none;
+      background: radial-gradient(circle at center, rgba(255, 20, 55, .28), rgba(42, 0, 8, .9) 60%, rgba(8, 0, 4, .98));
+      transition: opacity .28s ease, visibility .28s ease;
+    }
+
+    .true-form-flash {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 30, 55, .68);
+      opacity: 0;
+    }
+
+    .true-form-message {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      justify-items: center;
+      gap: 12px;
+      color: #ffe8df;
+      text-align: center;
+      opacity: 0;
+      transform: scale(.84);
+    }
+
+    .true-form-message span {
+      color: #ff183a;
+      font: 700 clamp(2.4rem, 8vw, 6rem) var(--font-jp);
+      text-shadow: 0 0 16px rgba(255, 20, 55, .8);
+    }
+
+    .true-form-message strong {
+      font-family: var(--font-display);
+      font-size: clamp(1.05rem, 3vw, 1.8rem);
+      letter-spacing: 2px;
+    }
+
+    body.true-form {
+      --blood: #310008;
+      --blood-bright: #ff1638;
+      --gold: #ff716f;
+      --gold-dim: #b63b48;
+      --deep-purple: #3b0010;
+    }
+
+    body.true-form .true-form-overlay { visibility: visible; opacity: 1; }
+    body.true-form .true-form-flash { animation: trueFormFlash .65s ease forwards; }
+    body.true-form .true-form-message { animation: trueFormMessage .7s .2s ease forwards; }
+    body.true-form main,
+    body.true-form footer,
+    body.true-form .ambient { animation: trueFormShake .45s ease; }
+
+    @keyframes trueFormFlash {
+      0% { opacity: 0; }
+      18% { opacity: .94; }
+      100% { opacity: 0; }
+    }
+    @keyframes trueFormMessage { to { opacity: 1; transform: scale(1); } }
+    @keyframes trueFormShake {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      20% { transform: translate3d(-3px, 1px, 0); }
+      40% { transform: translate3d(3px, -1px, 0); }
+      60% { transform: translate3d(-2px, 1px, 0); }
+      80% { transform: translate3d(2px, 0, 0); }
+    }
+
+    @media (max-width: 1100px) {
+      .site-header { width: 94vw; }
+      .hero-content { width: min(64vw, 720px); }
+      .kokushibo-portrait { width: min(45vw, 530px); }
+      .story-layout { grid-template-columns: 1fr; }
+      .story-aside { position: relative; top: auto; max-width: 540px; }
+      .techniques-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 820px) {
+      .site-header { top: 65px; padding: 0 13px; }
+      .site-brand { display: none; }
+      .site-nav {
+        justify-content: flex-start;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      .site-nav::-webkit-scrollbar { display: none; }
+      .hero-content { width: min(76vw, 660px); }
+      .kokushibo-portrait { width: 55vw; }
+      .kokushibo-layer-main { opacity: .3; }
+      .constellation-map { min-height: 470px; }
+      .inspiration-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 700px) {
+      section { scroll-margin-top: 30px; }
+      .site-header {
+        top: auto;
+        right: 12px;
+        bottom: 14px;
+        left: 12px;
+        width: auto;
+        transform: none;
+      }
+      .site-nav { gap: 18px; }
+      .site-nav a { font-size: 8px; }
+      .hero {
+        min-height: 100svh;
+        padding-top: 145px;
+        padding-bottom: 140px;
+      }
+      .hero-content { width: 100%; }
+      .kokushibo-portrait {
+        top: auto;
+        right: -9vw;
+        bottom: 0;
+        width: 78vw;
+        height: 73%;
+        opacity: .48;
+      }
+      .kokushibo-layer-main {
+        opacity: .2;
+        filter: blur(1.6px) saturate(.5) brightness(.48);
+      }
+      .kokushibo-layer-blur { opacity: .1; }
+      .scroll-eye { width: clamp(27px, 7.5vw, 39px); }
+      .counter-band,
+      .techniques-grid { grid-template-columns: 1fr; }
+      .counter-item {
+        border-right: 0;
+        border-bottom: 1px solid rgba(201, 169, 97, .18);
+      }
+      .counter-item:last-child { border-bottom: 0; }
+      .story-layout { gap: 44px; }
+      .chapters { padding-left: 55px; }
+      .chapters-line,
+      .chapters-progress { left: 17px; }
+      .chapter::before { left: -43px; }
+      .constellation-map { min-height: 420px; }
+      .constellation-node { font-size: 8px; }
+      .journey-toast {
+        right: 14px;
+        bottom: 86px;
+        left: 14px;
+        max-width: none;
+      }
+      .hero-discipline {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 5px;
+      }
+      footer { padding-bottom: 100px; }
+    }
+
+    @media (max-width: 420px) {
+      .site-nav { gap: 18px; }
+      .kokushibo-portrait { width: 84vw; opacity: .42; }
+      .scroll-eye { width: 26px; }
+      .story-quote { padding: 23px; }
+      .constellation-node strong { display: none; }
+      .constellation-node span { width: 13px; height: 13px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal,
+      .reveal-left,
+      .reveal-right,
+      .reveal-mask {
+        opacity: 1 !important;
+        transform: none !important;
+        clip-path: none !important;
+      }
+      .skills-marquee-track,
+      .kokushibo-layer-main,
+      .portrait-moon,
+      .organic-moon,
+      .constellation-node span,
+      .lunar-blob {
+        animation: none !important;
+      }
+      .constellation-lines line {
+        stroke-dashoffset: 0 !important;
+        transition: none !important;
+      }
+      body.true-form main,
+      body.true-form footer,
+      body.true-form .ambient { animation: none !important; }
+    }
   </style>
 </head>
 <body class="intro-active">
+  <svg class="moon-definitions" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="organic-moon-surface" x1="28" y1="12" x2="76" y2="112" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#fbfdff"/>
+        <stop offset="0.2" stop-color="#dceeff"/>
+        <stop offset="0.48" stop-color="#a8c9ef"/>
+        <stop offset="0.76" stop-color="#a47add"/>
+        <stop offset="1" stop-color="#5d347f"/>
+      </linearGradient>
+      <linearGradient id="organic-moon-edge" x1="42" y1="18" x2="75" y2="108" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#f8fcff"/>
+        <stop offset="0.5" stop-color="#c8b0ff"/>
+        <stop offset="1" stop-color="#7448a3"/>
+      </linearGradient>
+      <symbol id="organic-crescent" viewBox="0 0 120 120">
+        <path
+          d="M103 8 C77 13 51 30 37 52 C24 73 26 95 41 108 C49 115 59 116 71 111 C58 107 50 98 47 86 C43 70 50 52 63 37 C75 23 90 13 103 8 Z"
+          fill="url(#organic-moon-surface)"
+          stroke="url(#organic-moon-edge)"
+          stroke-width="2.4"
+          stroke-linejoin="round"
+          paint-order="stroke fill"
+        />
+      </symbol>
+    </defs>
+  </svg>
+
   <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
   <div id="introOverlay" class="intro-overlay" role="dialog" aria-label="Introdução do portfólio">
@@ -220,7 +1617,17 @@
       <path class="intro-slash s1" d="M30,230 A180,180 0 0,1 270,70"/>
       <path class="intro-slash s2" d="M270,230 A180,180 0 0,0 30,70"/>
       <path class="intro-slash s3" d="M70,25 A180,180 0 0,1 230,275"/>
-      <circle class="intro-moon" cx="150" cy="150" r="34"/>
+      <path
+        class="intro-moon"
+        d="
+          M 181 105
+          C 151 109, 128 131, 126 158
+          C 124 181, 142 198, 166 196
+          C 150 188, 144 174, 146 159
+          C 149 137, 162 118, 181 105
+          Z
+        "
+      />
     </svg>
     <div class="intro-label">DESPERTANDO</div>
     <button class="intro-skip" id="introSkip" type="button">PULAR ↦</button>
@@ -228,10 +1635,14 @@
 
   <div class="ambient"></div>
   <div class="moons-bg" aria-hidden="true">
-    <div class="crescent c1"></div>
-    <div class="crescent c2"></div>
-    <div class="crescent c3"></div>
-    <div class="crescent c4"></div>
+    <svg class="organic-moon bg-moon bm1" viewBox="0 0 120 120"><use href="#organic-crescent"></use></svg>
+    <svg class="organic-moon bg-moon bm2" viewBox="0 0 120 120"><use href="#organic-crescent"></use></svg>
+    <svg class="organic-moon bg-moon bm3" viewBox="0 0 120 120"><use href="#organic-crescent"></use></svg>
+    <svg class="organic-moon bg-moon bm4" viewBox="0 0 120 120"><use href="#organic-crescent"></use></svg>
+    <svg class="organic-moon bg-moon bm5" viewBox="0 0 120 120"><use href="#organic-crescent"></use></svg>
+    <svg class="organic-moon bg-moon bm6" viewBox="0 0 120 120"><use href="#organic-crescent"></use></svg>
+    <svg class="organic-moon bg-moon bm7" viewBox="0 0 120 120"><use href="#organic-crescent"></use></svg>
+    <svg class="organic-moon bg-moon bm8" viewBox="0 0 120 120"><use href="#organic-crescent"></use></svg>
   </div>
   <canvas id="embers" aria-hidden="true"></canvas>
 
@@ -241,59 +1652,661 @@
     <img class="scroll-eye" src="assets/eye-top.png" alt="">
     <img class="scroll-eye" src="assets/eye-top.png" alt="">
     <img class="scroll-eye" src="assets/eye-top.png" alt="">
+    <img class="scroll-eye" src="assets/eye-top.png" alt="">
   </div>
 
-  <div class="kokushibo-portrait" aria-hidden="true">
-    <div class="kokushibo-aura"></div>
-    <img class="kokushibo-composition" src="assets/kokushibo-composition.png" alt="">
-    <div class="portrait-moons">
-      <span class="portrait-moon pm1"></span>
-      <span class="portrait-moon pm2"></span>
-      <span class="portrait-moon pm3"></span>
-      <span class="portrait-moon pm4"></span>
+  <header class="site-header">
+    <a class="site-brand" href="#topo">JP<span>.</span></a>
+    <nav class="site-nav" aria-label="Navegação principal">
+      <a href="#sobre" data-section-link="sobre">Sobre mim</a>
+      <a href="#comecei" data-section-link="comecei">Como comecei</a>
+      <a href="#stack" data-section-link="stack">Arsenal</a>
+      <a href="#trajetoria" data-section-link="trajetoria">Trajetória</a>
+      <a href="#projetos" data-section-link="projetos">Projetos</a>
+      <a href="#tecnicas" data-section-link="tecnicas">Respiração</a>
+      <a href="#contato" data-section-link="contato">Contato</a>
+    </nav>
+    <div class="site-progress" aria-hidden="true">
+      <span id="siteProgressBar"></span>
     </div>
-  </div>
+  </header>
 
   <main id="conteudo">
     <section class="hero" id="topo">
-      <div class="moon" aria-hidden="true"></div><span class="kanji-mark" aria-hidden="true">月</span>
-      <div class="hero-kicker reveal in">DESENVOLVEDOR FULL STACK</div>
-      <h1 class="reveal in">João Pedro<br>Ferreira Matos</h1>
-      <p class="role reveal in d1">Construo interfaces e sistemas com a mesma obsessão por detalhe de quem afia uma lâmina por séculos. Frontend como ofício, full stack como caminho.</p>
-      <div class="cta-row reveal in d2">
-        <a class="btn btn-primary" href="#projetos">Ver projetos</a>
-        <a class="btn btn-ghost" href="https://github.com/jpedro00" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
-        <a class="btn btn-ghost" href="https://www.linkedin.com/in/jo%C3%A3o-pedro-ferreira-matos-37ba8b348/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+      <div class="lunar-blob" aria-hidden="true"></div>
+
+      <div class="kokushibo-portrait" aria-hidden="true">
+        <div class="kokushibo-aura"></div>
+
+        <div class="kokushibo-image-stage">
+          <img
+            class="kokushibo-layer kokushibo-layer-blur"
+            src="assets/kokushibo-composition.png"
+            alt=""
+          >
+          <img
+            class="kokushibo-layer kokushibo-layer-main"
+            src="assets/kokushibo-composition.png"
+            alt=""
+          >
+        </div>
+
+        <div class="portrait-moons" aria-hidden="true">
+          <svg class="organic-moon portrait-moon pm1" viewBox="0 0 120 120"><use href="#organic-crescent"></use></svg>
+          <svg class="organic-moon portrait-moon pm2" viewBox="0 0 120 120"><use href="#organic-crescent"></use></svg>
+          <svg class="organic-moon portrait-moon pm3" viewBox="0 0 120 120"><use href="#organic-crescent"></use></svg>
+        </div>
       </div>
-      <div class="scroll-hint" aria-hidden="true"><span class="line"></span>ROLE PARA DESPERTAR</div>
+
+      <span class="kanji-mark" aria-hidden="true">月</span>
+
+      <div class="hero-content">
+        <div class="hero-kicker reveal in">DESENVOLVEDOR FULL STACK</div>
+        <h1 class="reveal in">João Pedro<br>Ferreira Matos</h1>
+        <p class="role reveal in d1">
+          Desenvolvedor Full Stack Júnior com atuação prática em produtos reais,
+          interfaces React, integrações, dados em tempo real e segurança Web3.
+          Transformo regras de negócio em experiências digitais cuidadosas,
+          responsivas e prontas para evoluir.
+        </p>
+
+        <div class="hero-discipline reveal in d2">
+          <span>Eu construo</span>
+          <span class="discipline-window">
+            <strong id="rotatingDiscipline">interfaces</strong>
+          </span>
+        </div>
+
+        <div class="moon-phase-indicator reveal in d2" id="moonPhaseIndicator" aria-live="polite">
+          <span class="moon-phase-glyph" id="moonPhaseGlyph" aria-hidden="true">◐</span>
+          <span id="moonPhaseText">Calculando fase lunar…</span>
+        </div>
+
+        <div class="cta-row reveal in d2">
+          <a class="btn btn-primary" href="#projetos">Ver projetos</a>
+          <a class="btn btn-ghost" href="https://github.com/jpedro00" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+          <a class="btn btn-ghost" href="https://www.linkedin.com/in/jo%C3%A3o-pedro-ferreira-matos-37ba8b348/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+        </div>
+      </div>
+
+      <div class="scroll-hint" aria-hidden="true">
+        <span class="line"></span>
+        ROLE PARA DESPERTAR
+      </div>
     </section>
 
-    <section id="sobre"><span class="kanji-mark" aria-hidden="true">刻</span><div class="eyebrow reveal">01 · Sobre</div>
-      <div class="about-grid"><h2 class="reveal">Paciência de quem<br>já viu muitas eras.</h2><div>
-        <p class="reveal d1"><strong>Sou dev júnior na Tironi Tech</strong> e estudante de Análise e Desenvolvimento de Sistemas na FATEC Ourinhos. No dia a dia, ajudo a finalizar e evoluir projetos de clientes reais — com foco forte em frontend e uma presença cada vez maior em full stack.</p>
-        <p class="reveal d2">Gosto de interfaces que carregam identidade própria: nada de template genérico. Prefiro entender a fundo o problema antes de sair escrevendo código — e corrigir com precisão cirúrgica em vez de reescrever tudo do zero.</p>
-        <div class="about-tags reveal d3"><span class="tag">Frontend</span><span class="tag">Full Stack em evolução</span><span class="tag">Node.js</span><span class="tag">React</span><span class="tag">PostgreSQL</span><span class="tag">Supabase</span><span class="tag">Framer Motion</span></div>
-      </div></div>
+    <section class="facts-band" aria-label="Resumo profissional">
+      <div class="facts-grid">
+        <article class="fact-card reveal">
+          <span class="fact-index">01</span>
+          <strong>TironiTech</strong>
+          <p>Desenvolvimento de produtos reais, interfaces comerciais, correções e evolução de aplicações.</p>
+        </article>
+
+        <article class="fact-card reveal d1">
+          <span class="fact-index">02</span>
+          <strong>React e TypeScript</strong>
+          <p>Componentização, responsividade, estados, interfaces e integração com APIs.</p>
+        </article>
+
+        <article class="fact-card reveal d2">
+          <span class="fact-index">03</span>
+          <strong>Dados e tempo real</strong>
+          <p>Supabase, PostgreSQL, regras de negócio, autenticação e sincronização de estado.</p>
+        </article>
+
+        <article class="fact-card reveal d3">
+          <span class="fact-index">04</span>
+          <strong>Segurança Web3</strong>
+          <p>Extensões MV3, content scripts, service workers, assinaturas e análise de chamadas de carteira.</p>
+        </article>
+      </div>
+
+      <div class="counter-band reveal" id="counterBand">
+        <div class="counter-item">
+          <span class="counter-num" data-target="5">0</span>
+          <span class="counter-label">Projetos em destaque</span>
+        </div>
+        <div class="counter-item">
+          <span class="counter-num" data-target="4">0</span>
+          <span class="counter-label">Frentes técnicas</span>
+        </div>
+        <div class="counter-item">
+          <span class="counter-num" data-target="6">0</span>
+          <span class="counter-label">Olhos despertos</span>
+        </div>
+      </div>
     </section>
 
-    <section id="stack"><span class="kanji-mark" aria-hidden="true">技</span><div class="eyebrow reveal">02 · Arsenal</div><h2 class="reveal">Ferramentas de corte.</h2>
+    <section id="sobre" class="story-section">
+      <span class="kanji-mark" aria-hidden="true">私</span>
+      <div class="story-heading reveal-mask">
+        <div class="eyebrow">01 · Sobre mim</div>
+        <h2 data-scramble>Código é ferramenta.<br>Entender o problema é o ofício.</h2>
+      </div>
+
+      <div class="story-layout">
+        <aside class="story-aside reveal-left">
+          <span class="story-label">PERFIL</span>
+          <p>
+            Desenvolvedor Full Stack Júnior, estudante de ADS e alguém
+            que prefere compreender o fluxo completo antes de alterar
+            uma única linha.
+          </p>
+          <div class="story-location">
+            <span>Ourinhos, São Paulo</span>
+            <span>FATEC Ourinhos</span>
+            <span>TironiTech</span>
+          </div>
+        </aside>
+
+        <div class="story-copy">
+          <p class="story-lead reveal d1">
+            Trabalho na interseção entre desenvolvimento, produto e
+            experiência visual. Gosto de interfaces que possuem identidade,
+            mas também de investigar integrações, estados, bancos de dados
+            e regras que sustentam tudo o que aparece na tela.
+          </p>
+
+          <p class="reveal d2">
+            <strong>Sou Desenvolvedor Full Stack Júnior na TironiTech</strong>
+            e estudante de Análise e Desenvolvimento de Sistemas na FATEC
+            Ourinhos. Minha rotina envolve interfaces React, páginas
+            institucionais, integrações, bancos de dados, deploys,
+            responsividade e correções de bugs em projetos reais.
+          </p>
+
+          <p class="reveal d3">
+            Tenho uma afinidade especial por trabalhos que não terminam na
+            primeira versão. Gosto de analisar logs, acompanhar o fluxo
+            completo, identificar a origem de inconsistências e transformar
+            uma implementação funcional em algo mais organizado, previsível
+            e agradável de utilizar.
+          </p>
+
+          <p class="reveal">
+            Também exploro segurança Web3 e extensões de navegador, lidando
+            com content scripts, service workers, chamadas de carteira,
+            assinaturas, aprovações e comunicação entre diferentes contextos
+            do navegador.
+          </p>
+
+          <p class="reveal d1">
+            Meu objetivo não é apenas fazer a tela aparecer. Quero entender
+            como ela conversa com o restante do sistema, como o usuário
+            percorre o fluxo e como o código pode continuar evoluindo sem
+            perder clareza.
+          </p>
+
+          <blockquote class="story-quote reveal">
+            “Não quero somente fazer uma tela aparecer. Quero entender
+            por que ela existe, o que sustenta seu comportamento e como
+            poderá continuar evoluindo.”
+          </blockquote>
+
+          <div class="about-tags reveal d2">
+            <span class="tag">React</span>
+            <span class="tag">TypeScript</span>
+            <span class="tag">JavaScript</span>
+            <span class="tag">Supabase</span>
+            <span class="tag">PostgreSQL</span>
+            <span class="tag">REST APIs</span>
+            <span class="tag">Web3</span>
+            <span class="tag">Chrome MV3</span>
+            <span class="tag">UI/UX</span>
+            <span class="tag">Debugging</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="comecei">
+      <span class="kanji-mark" aria-hidden="true">始</span>
+      <div class="eyebrow reveal">02 · Como comecei</div>
+      <h2 class="reveal-mask" data-scramble>
+        Da curiosidade pela interface<br>ao sistema completo.
+      </h2>
+
+      <div class="chapters" id="chaptersTimeline">
+        <span class="chapters-line" aria-hidden="true"></span>
+        <span class="chapters-progress" aria-hidden="true"></span>
+
+        <article class="chapter reveal">
+          <span class="chapter-tag">Capítulo I</span>
+          <h3>Curiosidade transformada em construção</h3>
+          <p>
+            O começo veio da vontade de compreender como páginas, estilos e
+            interações eram transformados em algo utilizável. HTML, CSS e
+            JavaScript mostraram que código também poderia ser uma ferramenta visual.
+          </p>
+        </article>
+
+        <article class="chapter reveal d1">
+          <span class="chapter-tag">Capítulo II</span>
+          <h3>Interfaces que precisavam de estrutura</h3>
+          <p>
+            React e componentização trouxeram uma nova camada: organizar
+            estados, comportamentos e elementos que precisavam funcionar
+            juntos sem perder clareza.
+          </p>
+        </article>
+
+        <article class="chapter reveal d2">
+          <span class="chapter-tag">Capítulo III</span>
+          <h3>Fundamentos na FATEC Ourinhos</h3>
+          <p>
+            A formação em Análise e Desenvolvimento de Sistemas ampliou o
+            contato com lógica, bancos de dados, engenharia de software,
+            trabalho em equipe, documentação e construção de sistemas.
+          </p>
+        </article>
+
+        <article class="chapter reveal d3">
+          <span class="chapter-year">DEZ/2025 — ATUAL</span>
+          <span class="chapter-tag">Capítulo IV</span>
+          <h3>Produtos reais na TironiTech</h3>
+          <p>
+            A atuação profissional trouxe clientes, deploys, regras de negócio,
+            logs, integrações e a responsabilidade de evoluir aplicações que
+            já estavam em funcionamento.
+          </p>
+        </article>
+
+        <article class="chapter reveal">
+          <span class="chapter-tag">Capítulo V</span>
+          <h3>Full Stack, produtos e segurança Web3</h3>
+          <p>
+            Hoje continuo expandindo minha atuação em aplicações completas,
+            produtos SaaS, dados em tempo real, extensões de navegador e
+            proteção de interações com carteiras digitais.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <div class="skills-marquee" aria-hidden="true">
+      <div class="skills-marquee-track">
+        <span>REACT</span><i>◐</i><span>VITE</span><i>◐</i><span>JAVASCRIPT</span><i>◐</i><span>TYPESCRIPT</span><i>◐</i><span>HTML5</span><i>◐</i><span>CSS3</span><i>◐</i><span>NODE.JS</span><i>◐</i><span>EXPRESS</span><i>◐</i><span>SUPABASE</span><i>◐</i><span>POSTGRESQL</span><i>◐</i><span>REST APIs</span><i>◐</i><span>WEB3</span><i>◐</i><span>CHROME MV3</span><i>◐</i><span>GIT</span><i>◐</i><span>VERCEL</span><i>◐</i><span>RENDER</span><i>◐</i>
+        <span>REACT</span><i>◐</i><span>VITE</span><i>◐</i><span>JAVASCRIPT</span><i>◐</i><span>TYPESCRIPT</span><i>◐</i><span>HTML5</span><i>◐</i><span>CSS3</span><i>◐</i><span>NODE.JS</span><i>◐</i><span>EXPRESS</span><i>◐</i><span>SUPABASE</span><i>◐</i><span>POSTGRESQL</span><i>◐</i><span>REST APIs</span><i>◐</i><span>WEB3</span><i>◐</i><span>CHROME MV3</span><i>◐</i><span>GIT</span><i>◐</i><span>VERCEL</span><i>◐</i><span>RENDER</span><i>◐</i>
+      </div>
+    </div>
+
+    <section id="stack">
+      <span class="kanji-mark" aria-hidden="true">技</span>
+      <div class="eyebrow reveal">03 · Arsenal</div>
+      <h2 class="reveal-mask" data-scramble>Ferramentas de corte.</h2>
+
+      <p class="section-intro reveal d1">
+        Tecnologias que utilizo para transformar regras, fluxos e ideias em
+        interfaces e sistemas que funcionam fora do ambiente de demonstração.
+      </p>
+
+      <div class="stack-groups">
+        <article class="stack-group reveal">
+          <span class="stack-number">I</span>
+          <h3>Interface</h3>
+          <p>React, Vite, JavaScript, TypeScript, HTML5, CSS3, componentização, responsividade e cuidado com hierarquia visual.</p>
+        </article>
+
+        <article class="stack-group reveal d1">
+          <span class="stack-number">II</span>
+          <h3>Back-end e dados</h3>
+          <p>Node.js, Express, Supabase, PostgreSQL, APIs REST, autenticação, regras de negócio e sincronização de estado.</p>
+        </article>
+
+        <article class="stack-group reveal d2">
+          <span class="stack-number">III</span>
+          <h3>Web3 e extensões</h3>
+          <p>Chrome Extension MV3, content scripts, service worker, MAIN world injection, wallet calls, approvals e signatures.</p>
+        </article>
+
+        <article class="stack-group reveal d3">
+          <span class="stack-number">IV</span>
+          <h3>Entrega e qualidade</h3>
+          <p>Git, GitHub, npm, Vercel, Render, DevTools, logs, testes manuais, validação de fluxo, build e documentação.</p>
+        </article>
+      </div>
+
       <div class="skills-list">
-        <div class="skill-row reveal"><span class="n">JavaScript / TypeScript</span><span class="lvl">USO DIÁRIO</span></div><div class="skill-row reveal d1"><span class="n">React</span><span class="lvl">USO DIÁRIO</span></div>
-        <div class="skill-row reveal d2"><span class="n">Node.js / Express</span><span class="lvl">SÓLIDO</span></div><div class="skill-row reveal d3"><span class="n">PostgreSQL</span><span class="lvl">SÓLIDO</span></div>
-        <div class="skill-row reveal"><span class="n">Supabase / Firebase</span><span class="lvl">SÓLIDO</span></div><div class="skill-row reveal d1"><span class="n">Framer Motion</span><span class="lvl">EM EVOLUÇÃO</span></div>
-        <div class="skill-row reveal d2"><span class="n">Tailwind CSS</span><span class="lvl">USO DIÁRIO</span></div><div class="skill-row reveal d3"><span class="n">Git / GitHub</span><span class="lvl">USO DIÁRIO</span></div>
+        <div class="skill-row reveal"><span class="n">JavaScript / TypeScript</span><span class="lvl">USO FREQUENTE</span></div>
+        <div class="skill-row reveal d1"><span class="n">React / Vite</span><span class="lvl">INTERFACES</span></div>
+        <div class="skill-row reveal d2"><span class="n">Node.js / Express</span><span class="lvl">BACK-END</span></div>
+        <div class="skill-row reveal d3"><span class="n">Supabase / PostgreSQL</span><span class="lvl">DADOS</span></div>
+        <div class="skill-row reveal"><span class="n">Chrome Extension MV3</span><span class="lvl">WEB3</span></div>
+        <div class="skill-row reveal d1"><span class="n">Git / GitHub</span><span class="lvl">VERSIONAMENTO</span></div>
+        <div class="skill-row reveal d2"><span class="n">Vercel / Render</span><span class="lvl">DEPLOY</span></div>
+        <div class="skill-row reveal d3"><span class="n">Logs / DevTools</span><span class="lvl">DEBUGGING</span></div>
+      </div>
+
+      <div class="constellation-map reveal" id="constellationMap" aria-label="Constelação de habilidades">
+        <svg class="constellation-lines" id="constellationSvg" aria-hidden="true"></svg>
+        <div class="constellation-node node-react" data-skill="React"><span></span><strong>React</strong></div>
+        <div class="constellation-node node-ts" data-skill="TypeScript"><span></span><strong>TypeScript</strong></div>
+        <div class="constellation-node node-node" data-skill="Node.js"><span></span><strong>Node.js</strong></div>
+        <div class="constellation-node node-supabase" data-skill="Supabase"><span></span><strong>Supabase</strong></div>
+        <div class="constellation-node node-postgres" data-skill="PostgreSQL"><span></span><strong>PostgreSQL</strong></div>
+        <div class="constellation-node node-web3" data-skill="Web3"><span></span><strong>Web3</strong></div>
+        <div class="constellation-node node-git" data-skill="Git"><span></span><strong>Git</strong></div>
+        <div class="constellation-node node-deploy" data-skill="Deploy"><span></span><strong>Deploy</strong></div>
       </div>
     </section>
 
-    <section id="projetos"><span class="kanji-mark" aria-hidden="true">業</span><div class="eyebrow reveal">03 · Obras</div><h2 class="reveal" style="margin-bottom:36px">Projetos que carrego comigo.</h2>
+    <section id="trajetoria">
+      <span class="kanji-mark" aria-hidden="true">歩</span>
+      <div class="eyebrow reveal">04 · Trajetória</div>
+      <h2 class="reveal-mask" data-scramble>Experiência construída<br>enquanto o produto evolui.</h2>
+
+      <div class="timeline">
+        <article class="timeline-item reveal">
+          <div class="timeline-meta">
+            <span>DEZ/2025 — ATUAL</span>
+            <small>OURINHOS/SP</small>
+          </div>
+
+          <div class="timeline-content">
+            <span class="timeline-type">EXPERIÊNCIA PROFISSIONAL</span>
+            <h3>Desenvolvedor Full Stack Júnior — TironiTech</h3>
+            <p>
+              Atuação em produtos digitais, páginas institucionais e
+              aplicações de clientes, acompanhando tarefas desde o ajuste
+              visual até a integração com dados e publicação.
+            </p>
+
+            <ul class="detail-list">
+              <li>Desenvolvimento de interfaces React e páginas responsivas.</li>
+              <li>Integração com banco de dados, APIs e regras de negócio.</li>
+              <li>Análise de logs e correção de bugs em fluxos existentes.</li>
+              <li>Apoio em deploy, validação e apresentação para clientes.</li>
+              <li>Evolução visual de protótipos e produtos comerciais.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="timeline-item reveal d1">
+          <div class="timeline-meta">
+            <span>EM ANDAMENTO</span>
+            <small>2º SEMESTRE</small>
+          </div>
+
+          <div class="timeline-content">
+            <span class="timeline-type">FORMAÇÃO</span>
+            <h3>Análise e Desenvolvimento de Sistemas — FATEC Ourinhos</h3>
+            <p>
+              Formação voltada para fundamentos de desenvolvimento,
+              engenharia de software, lógica, estruturas de dados,
+              bancos de dados e construção de sistemas.
+            </p>
+
+            <ul class="detail-list">
+              <li>Desenvolvimento de trabalhos e aplicações em equipe.</li>
+              <li>Prática com documentação, apresentação e divisão de escopo.</li>
+              <li>Evolução contínua de fundamentos técnicos e visão de produto.</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="projetos"><span class="kanji-mark" aria-hidden="true">業</span><div class="eyebrow reveal">05 · Projetos</div><h2 class="reveal-mask" data-scramble style="margin-bottom:36px">Projetos que carrego comigo.</h2>
       <div class="proj-list">
-        <article class="proj-card reveal"><div class="proj-index">01</div><div class="proj-body"><div class="proj-title-row"><svg class="proj-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 5h16a1 1 0 011 1v9a1 1 0 01-1 1H9l-4 4v-4H4a1 1 0 01-1-1V6a1 1 0 011-1Z"/><circle cx="8.5" cy="10.5" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="10.5" r="1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="10.5" r="1" fill="currentColor" stroke="none"/></svg><h3>NITRUS</h3></div><p>Plataforma B2B de IA para atendimento, com integração ao WhatsApp, motor de agentes sobre OpenAI e sincronização com o CRM Mercos. Em rebranding ativo, com foco pesado em identidade visual própria.</p><div class="stack"><span>React</span><span>Framer Motion</span><span>OpenAI API</span><span>WhatsApp API</span></div></div><a class="proj-link" href="https://github.com/jpedro00" target="_blank" rel="noopener noreferrer" aria-label="Ver NITRUS no GitHub">Ver no GitHub ↗</a></article>
-        <article class="proj-card reveal"><div class="proj-index">02</div><div class="proj-body"><div class="proj-title-row"><svg class="proj-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 8a2 2 0 012-2h14a2 2 0 012 2v2a2 2 0 000 4v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2a2 2 0 000-4V8Z"/><path d="M9 6v12" stroke-dasharray="2 2"/></svg><h3>XNAMAI</h3></div><p>Plataforma de sorteios promocionais, migrada de uma base legada e reconstruída com backend próprio. Correções profundas de constraints de banco, rotas e regras de negócio.</p><div class="stack"><span>Node.js</span><span>Express</span><span>PostgreSQL</span><span>Render + Neon</span></div></div><a class="proj-link" href="https://github.com/jpedro00" target="_blank" rel="noopener noreferrer" aria-label="Ver XNAMAI no GitHub">Ver no GitHub ↗</a></article>
-        <article class="proj-card reveal"><div class="proj-index">03</div><div class="proj-body"><div class="proj-title-row"><svg class="proj-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="2" y="8" width="20" height="10" rx="5"/><path d="M7 11v4M5 13h4"/><circle cx="16" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="18.5" cy="14.5" r="1" fill="currentColor" stroke="none"/></svg><h3>SalesGame</h3></div><p>Jogo multiplayer no navegador com sincronização de estado em tempo real entre clientes — resolvendo condições de corrida e consistência de estado sob concorrência.</p><div class="stack"><span>React</span><span>Supabase Realtime</span></div></div><a class="proj-link" href="https://github.com/jpedro00" target="_blank" rel="noopener noreferrer" aria-label="Ver SalesGame no GitHub">Ver no GitHub ↗</a></article>
+        <article class="proj-card reveal">
+          <div class="proj-index">01</div>
+          <div class="proj-body">
+            <div class="proj-title-row">
+              <svg class="proj-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                <path d="M4 5h16a1 1 0 011 1v9a1 1 0 01-1 1H9l-4 4v-4H4a1 1 0 01-1-1V6a1 1 0 011-1Z"/>
+                <circle cx="8.5" cy="10.5" r="1" fill="currentColor" stroke="none"/>
+                <circle cx="12" cy="10.5" r="1" fill="currentColor" stroke="none"/>
+                <circle cx="15.5" cy="10.5" r="1" fill="currentColor" stroke="none"/>
+              </svg>
+              <h3>NITRUS</h3>
+            </div>
+            <p>
+              Plataforma B2B de inteligência artificial para atendimento,
+              operação comercial e visualização de informações de negócio.
+              Participei da evolução visual, organização do frontend, modularização
+              de componentes e construção de uma identidade mais tecnológica.
+            </p>
+            <div class="stack">
+              <span>React</span>
+              <span>TypeScript</span>
+              <span>FastAPI</span>
+              <span>OpenAI</span>
+              <span>WhatsApp</span>
+            </div>
+          </div>
+          <a class="proj-link" href="https://github.com/jpedro00" target="_blank" rel="noopener noreferrer" aria-label="Ver NITRUS no GitHub">Ver no GitHub ↗</a>
+        </article>
+        <article class="proj-card reveal">
+          <div class="proj-index">02</div>
+          <div class="proj-body">
+            <div class="proj-title-row">
+              <svg class="proj-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                <path d="M3 8a2 2 0 012-2h14a2 2 0 012 2v2a2 2 0 000 4v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2a2 2 0 000-4V8Z"/>
+                <path d="M9 6v12" stroke-dasharray="2 2"/>
+              </svg>
+              <h3>XNAMAI</h3>
+            </div>
+            <p>
+              Plataforma de sorteios promocionais construída a partir da evolução
+              de uma base legada. O trabalho envolveu regras de negócio, grade de
+              números, compradores, reservas, integrações, banco de dados,
+              administração e automações operacionais.
+            </p>
+            <div class="stack">
+              <span>React</span>
+              <span>Node.js</span>
+              <span>PostgreSQL</span>
+              <span>Supabase</span>
+              <span>APIs</span>
+            </div>
+          </div>
+          <a class="proj-link" href="https://github.com/jpedro00" target="_blank" rel="noopener noreferrer" aria-label="Ver XNAMAI no GitHub">Ver no GitHub ↗</a>
+        </article>
+        <article class="proj-card reveal">
+          <div class="proj-index">03</div>
+          <div class="proj-body">
+            <div class="proj-title-row">
+              <svg class="proj-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                <rect x="2" y="8" width="20" height="10" rx="5"/>
+                <path d="M7 11v4M5 13h4"/>
+                <circle cx="16" cy="12" r="1" fill="currentColor" stroke="none"/>
+                <circle cx="18.5" cy="14.5" r="1" fill="currentColor" stroke="none"/>
+              </svg>
+              <h3>SalesGame</h3>
+            </div>
+            <p>
+              Jogo multiplayer de vendas e gestão comercial com lobbies, salas,
+              turnos, rodadas, ranking, faturamento, despesas, compras,
+              sorte e revés, treinamentos, falência e definição de vencedor
+              por patrimônio.
+            </p>
+            <ul class="project-points">
+              <li>Sincronização de estado com Supabase Realtime.</li>
+              <li>Correção de conflitos de rede e condições de corrida.</li>
+              <li>Organização de modais assíncronos e progressão de rodadas.</li>
+              <li>Regras comerciais e recuperação financeira.</li>
+            </ul>
+            <div class="stack">
+              <span>React 18</span>
+              <span>Vite</span>
+              <span>JavaScript</span>
+              <span>Supabase Realtime</span>
+              <span>PostgreSQL</span>
+            </div>
+          </div>
+          <a class="proj-link" href="https://github.com/jpedro00" target="_blank" rel="noopener noreferrer" aria-label="Ver SalesGame no GitHub">Ver no GitHub ↗</a>
+        </article>
+
+        <article class="proj-card reveal">
+          <div class="proj-index">04</div>
+          <div class="proj-body">
+            <div class="proj-title-row">
+              <h3>CryptoWalletSignGuard</h3>
+            </div>
+            <p>
+              Extensão de navegador voltada à segurança de carteiras Web3.
+              Intercepta chamadas sensíveis antes da confirmação no wallet popup
+              e apresenta overlays que ajudam o usuário a compreender riscos,
+              permissões e possíveis consequências.
+            </p>
+            <ul class="project-points">
+              <li>Conexões e troca de rede.</li>
+              <li>Transações e approvals ilimitados.</li>
+              <li>Assinaturas e typed data.</li>
+              <li>Domínios suspeitos e allow/blocklist.</li>
+              <li>Content script, service worker e MAIN world injection.</li>
+            </ul>
+            <div class="stack">
+              <span>TypeScript</span>
+              <span>Chrome MV3</span>
+              <span>Web3</span>
+              <span>Supabase REST</span>
+              <span>esbuild</span>
+              <span>i18n</span>
+            </div>
+          </div>
+          <a class="proj-link" href="https://www.walletsignguard.com/" target="_blank" rel="noopener noreferrer">Ver produto ↗</a>
+        </article>
+
+        <article class="proj-card reveal">
+          <div class="proj-index">05</div>
+          <div class="proj-body">
+            <div class="proj-title-row">
+              <h3>Sites e experiências comerciais</h3>
+            </div>
+            <p>
+              Desenvolvimento e evolução de sites institucionais e landings
+              pages com foco em apresentação profissional, hierarquia visual,
+              responsividade, clareza da proposta e conversão de visitantes.
+            </p>
+            <ul class="project-points">
+              <li>WalletSignGuard: comunicação de riscos, approvals, assinaturas e instalação da extensão.</li>
+              <li>TironiTech: serviços, cases, apresentação institucional e confiança para leads.</li>
+              <li>Ajustes de responsividade, publicação e validação em produção.</li>
+            </ul>
+            <div class="stack">
+              <span>React</span>
+              <span>JavaScript</span>
+              <span>CSS</span>
+              <span>UI/UX</span>
+              <span>Vercel</span>
+            </div>
+          </div>
+          <a class="proj-link" href="https://tironitech.com" target="_blank" rel="noopener noreferrer">Ver trabalhos ↗</a>
+        </article>
       </div>
     </section>
 
-    <section id="direcionamentos"><span class="kanji-mark" aria-hidden="true">道</span><div class="eyebrow reveal">04 · Direcionamentos</div><h2 class="reveal" style="margin-bottom:36px">Onde meu trabalho vive.</h2>
+    <section id="processo">
+      <span class="kanji-mark" aria-hidden="true">型</span>
+      <div class="eyebrow reveal">06 · Processo</div>
+      <h2 class="reveal-mask" data-scramble>Um fluxo sem atalhos invisíveis.</h2>
+      <p class="section-intro reveal d1">
+        Cada projeto pede um nível diferente de profundidade, mas algumas
+        etapas continuam importantes: entender, construir, validar e deixar
+        o caminho mais claro para quem continuará evoluindo o produto.
+      </p>
+
+      <div class="process-grid">
+        <article class="process-card reveal">
+          <span class="process-index">01</span>
+          <h3>Investigar</h3>
+          <p>
+            Entender o fluxo existente, os objetivos do usuário,
+            as regras de negócio e os pontos onde a implementação
+            deixa de representar o comportamento esperado.
+          </p>
+        </article>
+
+        <article class="process-card reveal d1">
+          <span class="process-index">02</span>
+          <h3>Construir</h3>
+          <p>
+            Implementar de forma incremental, respeitando o que já funciona
+            e evitando alterações desnecessárias fora do escopo.
+          </p>
+        </article>
+
+        <article class="process-card reveal d2">
+          <span class="process-index">03</span>
+          <h3>Validar</h3>
+          <p>
+            Conferir responsividade, estados intermediários, logs,
+            integrações, comportamento em produção e experiência completa.
+          </p>
+        </article>
+
+        <article class="process-card reveal d3">
+          <span class="process-index">04</span>
+          <h3>Entregar</h3>
+          <p>
+            Organizar código, registrar alterações e comunicar de maneira
+            clara o que foi feito, testado e deixado para a próxima etapa.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section id="tecnicas">
+      <span class="kanji-mark" aria-hidden="true">月</span>
+      <div class="eyebrow reveal">07 · Respiração</div>
+      <h2 class="reveal-mask" data-scramble>Cinco formas para construir<br>com intenção.</h2>
+      <p class="section-intro reveal d1">
+        Uma metáfora visual para princípios que uso no trabalho:
+        método, precisão, identidade, validação e comunicação.
+      </p>
+
+      <div class="techniques-grid">
+        <article class="technique-card reveal">
+          <span class="technique-index">Primeira forma</span>
+          <h3>Entender antes de codar</h3>
+          <p>Ler o contexto, mapear dependências e compreender o fluxo antes de decidir a alteração.</p>
+          <svg class="organic-moon mini-moon" viewBox="0 0 120 120" aria-hidden="true"><use href="#organic-crescent"></use></svg>
+        </article>
+        <article class="technique-card reveal d1">
+          <span class="technique-index">Segunda forma</span>
+          <h3>Precisão cirúrgica</h3>
+          <p>Alterar apenas o necessário, preservando comportamentos válidos e reduzindo regressões.</p>
+          <svg class="organic-moon mini-moon" viewBox="0 0 120 120" aria-hidden="true"><use href="#organic-crescent"></use></svg>
+        </article>
+        <article class="technique-card reveal d2">
+          <span class="technique-index">Terceira forma</span>
+          <h3>Identidade acima de template</h3>
+          <p>Construir interfaces coerentes com a mensagem do produto, sem perder clareza ou função.</p>
+          <svg class="organic-moon mini-moon" viewBox="0 0 120 120" aria-hidden="true"><use href="#organic-crescent"></use></svg>
+        </article>
+        <article class="technique-card reveal d3">
+          <span class="technique-index">Quarta forma</span>
+          <h3>Validar o fluxo completo</h3>
+          <p>Olhar além da tela: dados, integrações, estados, erros, responsividade e produção.</p>
+          <svg class="organic-moon mini-moon" viewBox="0 0 120 120" aria-hidden="true"><use href="#organic-crescent"></use></svg>
+        </article>
+        <article class="technique-card reveal">
+          <span class="technique-index">Quinta forma</span>
+          <h3>Entregar com clareza</h3>
+          <p>Registrar decisões e comunicar o resultado para que a próxima evolução comece com contexto.</p>
+          <svg class="organic-moon mini-moon" viewBox="0 0 120 120" aria-hidden="true"><use href="#organic-crescent"></use></svg>
+        </article>
+      </div>
+
+      <div class="inspiration-grid" aria-label="O que me inspira">
+        <article class="inspiration-card reveal">
+          <h3>Produtos que resolvem</h3>
+          <p>Experiências em que forma visual, regra de negócio e utilidade caminham juntas.</p>
+        </article>
+        <article class="inspiration-card reveal d1">
+          <h3>Sistemas compreensíveis</h3>
+          <p>Código organizado para ser investigado, validado e evoluído por outras pessoas.</p>
+        </article>
+        <article class="inspiration-card reveal d2">
+          <h3>Identidade com propósito</h3>
+          <p>Direções visuais memoráveis que respeitam leitura, desempenho e acessibilidade.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="direcionamentos"><span class="kanji-mark" aria-hidden="true">道</span><div class="eyebrow reveal">08 · Direcionamentos</div><h2 class="reveal-mask" data-scramble style="margin-bottom:36px">Onde meu trabalho vive.</h2>
       <div class="links-grid">
         <a class="link-card reveal" href="https://www.sorteiosxnamai.com.br/" target="_blank" rel="noopener noreferrer"><span class="lc-eyebrow">SORTEIOS</span><h3>XNAMAI</h3><p>Plataforma de sorteios promocionais em produção.</p><span class="lc-go">Acessar plataforma ↗</span></a>
         <a class="link-card reveal d1" href="https://www.sorteionewstore.com.br/" target="_blank" rel="noopener noreferrer"><span class="lc-eyebrow">SORTEIOS</span><h3>NewStore</h3><p>Base legada que deu origem ao XNAMAI, ainda em operação.</p><span class="lc-go">Acessar plataforma ↗</span></a>
@@ -302,87 +2315,1282 @@
       </div>
     </section>
 
-    <section class="awaken" id="contato"><span class="kanji-mark" aria-hidden="true" style="left:0;right:auto">対</span><div class="eyebrow reveal" style="justify-content:center">05 · Contato</div><h2 class="reveal">Seis olhos abertos.<br>Um convite direto.</h2><p class="reveal d1">Se meu trabalho ressoou com o que você precisa, vamos conversar. Sem formulário, sem intermediário — direto ao ponto.</p><div class="cta-row reveal d2"><a class="btn btn-primary" href="https://www.linkedin.com/in/jo%C3%A3o-pedro-ferreira-matos-37ba8b348/" target="_blank" rel="noopener noreferrer">Falar no LinkedIn</a><a class="btn btn-ghost" href="https://github.com/jpedro00" target="_blank" rel="noopener noreferrer">Ver GitHub</a></div></section>
+    <section id="faq">
+      <span class="kanji-mark" aria-hidden="true">問</span>
+      <div class="eyebrow reveal">09 · FAQ</div>
+      <h2 class="reveal-mask" data-scramble>Perguntas antes<br>do primeiro contato.</h2>
+
+      <div class="faq-list">
+        <article class="faq-item reveal">
+          <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-1">
+            <span>Em quais tipos de projeto você atua?</span><span aria-hidden="true">+</span>
+          </button>
+          <div class="faq-answer" id="faq-1" role="region" hidden>
+            Interfaces React, aplicações Full Stack, integrações, sites institucionais,
+            experiências comerciais, extensões de navegador e investigação de fluxos existentes.
+          </div>
+        </article>
+        <article class="faq-item reveal d1">
+          <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-2">
+            <span>Você trabalha apenas com frontend?</span><span aria-hidden="true">+</span>
+          </button>
+          <div class="faq-answer" id="faq-2" role="region" hidden>
+            Não. Minha atuação inclui interface, Node.js, APIs, Supabase, PostgreSQL,
+            autenticação, regras de negócio, estado em tempo real, deploy e validação.
+          </div>
+        </article>
+        <article class="faq-item reveal d2">
+          <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-3">
+            <span>Como você começa uma correção?</span><span aria-hidden="true">+</span>
+          </button>
+          <div class="faq-answer" id="faq-3" role="region" hidden>
+            Primeiro entendo o comportamento esperado, reproduzo o problema, leio o fluxo
+            e uso logs e DevTools para localizar a origem antes de alterar o código.
+          </div>
+        </article>
+        <article class="faq-item reveal d3">
+          <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-4">
+            <span>Como entrar em contato?</span><span aria-hidden="true">+</span>
+          </button>
+          <div class="faq-answer" id="faq-4" role="region" hidden>
+            Você pode falar comigo pelo LinkedIn, consultar meu GitHub ou enviar
+            um e-mail pelos links ao final desta página.
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="awaken" id="contato">
+      <span class="kanji-mark" aria-hidden="true" style="left:0;right:auto">対</span>
+      <div class="eyebrow reveal" style="justify-content:center">10 · Contato</div>
+      <h2 class="reveal-mask" data-scramble>Seis olhos abertos.<br>Um convite direto.</h2>
+      <p class="reveal d1">
+        Estou construindo minha trajetória em desenvolvimento Full Stack
+        por meio de projetos reais, produtos em produção e estudo contínuo.
+        Se existe um problema que precisa de interface, integração,
+        investigação ou evolução, podemos conversar.
+      </p>
+
+      <div class="contact-notes reveal d2">
+        <span>React e interfaces</span>
+        <span>Produtos Full Stack</span>
+        <span>Web3 e extensões</span>
+        <span>Freelancer e projetos web</span>
+      </div>
+
+      <div class="cta-row reveal d3">
+        <a class="btn btn-primary burn-seal-link" data-burn-seal href="https://www.linkedin.com/in/jo%C3%A3o-pedro-ferreira-matos-37ba8b348/" target="_blank" rel="noopener noreferrer">
+          Falar no LinkedIn
+          <span class="burn-seal" aria-hidden="true">契</span>
+        </a>
+        <a class="btn btn-ghost" href="https://github.com/jpedro00" target="_blank" rel="noopener noreferrer">Ver GitHub</a>
+        <a class="btn btn-ghost" href="mailto:jpfmatosfm@gmail.com">Enviar e-mail</a>
+      </div>
+    </section>
   </main>
 
-  <footer>© <span id="year">2026</span> JOÃO PEDRO FERREIRA MATOS — CONSTRUÍDO COM PACIÊNCIA DE SÉCULOS</footer>
+  <footer>
+    <span>© <span id="year">2026</span> JOÃO PEDRO FERREIRA MATOS — CONSTRUÍDO COM PACIÊNCIA E PRECISÃO</span>
+    <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false">
+      Som ritual: desligado
+    </button>
+  </footer>
 
-  <script>
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const introOverlay = document.getElementById("introOverlay");
-    const introSkip = document.getElementById("introSkip");
+  <div class="true-form-overlay" id="trueFormOverlay" aria-hidden="true">
+    <div class="true-form-flash"></div>
+    <div class="true-form-message">
+      <span>真形</span>
+      <strong>Seis olhos. Uma só lâmina.</strong>
+    </div>
+  </div>
+
+  <div class="journey-toast" id="journeyToast" role="status" aria-live="polite">
+    <span aria-hidden="true">月</span>
+    <div>
+      <strong>Jornada completa</strong>
+      <small>Você percorreu todas as formas.</small>
+    </div>
+  </div>
+
+  <script id="appScript">
+    const reduceMotion =
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function applyLocalCycle() {
+      const localHour = new Date().getHours();
+      document.documentElement.dataset.cycle =
+        localHour >= 6 && localHour < 18
+          ? "day"
+          : "night";
+    }
+
+    function calculateMoonPhase(date = new Date()) {
+      const synodicMonth = 29.53058867;
+      const knownNewMoon =
+        Date.UTC(2000, 0, 6, 18, 14, 0);
+      const daysSinceKnownMoon =
+        (date.getTime() - knownNewMoon) / 86400000;
+      const cycleDay =
+        ((daysSinceKnownMoon % synodicMonth) +
+          synodicMonth) %
+        synodicMonth;
+      const fraction = cycleDay / synodicMonth;
+      const day = Math.floor(cycleDay) + 1;
+
+      if (fraction < .0625 || fraction >= .9375) {
+        return { name: "Lua nova", glyph: "🌑", day };
+      }
+      if (fraction < .1875) {
+        return { name: "Lua crescente", glyph: "🌒", day };
+      }
+      if (fraction < .3125) {
+        return { name: "Quarto crescente", glyph: "🌓", day };
+      }
+      if (fraction < .4375) {
+        return { name: "Gibosa crescente", glyph: "🌔", day };
+      }
+      if (fraction < .5625) {
+        return { name: "Lua cheia", glyph: "🌕", day };
+      }
+      if (fraction < .6875) {
+        return { name: "Gibosa minguante", glyph: "🌖", day };
+      }
+      if (fraction < .8125) {
+        return { name: "Quarto minguante", glyph: "🌗", day };
+      }
+      return { name: "Lua minguante", glyph: "🌘", day };
+    }
+
+    function renderMoonPhase() {
+      const phase = calculateMoonPhase();
+      const phaseText =
+        document.getElementById("moonPhaseText");
+      const phaseGlyph =
+        document.getElementById("moonPhaseGlyph");
+
+      if (phaseText) {
+        phaseText.textContent =
+          phase.name +
+          " — dia " +
+          phase.day +
+          " do ciclo";
+      }
+
+      if (phaseGlyph) {
+        phaseGlyph.textContent = phase.glyph;
+      }
+    }
+
+    applyLocalCycle();
+    renderMoonPhase();
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+
+    const introOverlay =
+      document.getElementById("introOverlay");
+    const introSkip =
+      document.getElementById("introSkip");
     let introTimer;
 
     function endIntro() {
-      if (!introOverlay || introOverlay.classList.contains("hide")) return;
+      if (
+        !introOverlay ||
+        introOverlay.classList.contains("hide")
+      ) {
+        return;
+      }
+
       clearTimeout(introTimer);
       introOverlay.classList.add("hide");
       document.body.classList.remove("intro-active");
-      setTimeout(() => introOverlay.remove(), reduceMotion ? 20 : 1100);
+      setTimeout(
+        () => introOverlay.remove(),
+        reduceMotion ? 20 : 1100
+      );
     }
-    if (reduceMotion) { endIntro(); } else {
-      requestAnimationFrame(() => introOverlay.classList.add("play"));
+
+    if (reduceMotion) {
+      endIntro();
+    } else {
+      requestAnimationFrame(() => {
+        introOverlay.classList.add("play");
+      });
       introTimer = setTimeout(endIntro, 3000);
     }
+
     introSkip.addEventListener("click", endIntro);
-    document.addEventListener("keydown", event => { if (event.key === "Escape") endIntro(); });
 
-    const revealEls = document.querySelectorAll(".reveal");
-    if ("IntersectionObserver" in window && !reduceMotion) {
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) { entry.target.classList.add("in"); observer.unobserve(entry.target); }
+    function scrambleHeading(element) {
+      if (
+        !element ||
+        element.dataset.scrambled === "1"
+      ) {
+        return;
+      }
+
+      element.dataset.scrambled = "1";
+
+      if (reduceMotion) {
+        return;
+      }
+
+      const original = element.innerHTML;
+      const plain = element.textContent;
+      const characters = "月影技型歩零壱弐参紫紅";
+      let frame = 0;
+      const totalFrames =
+        Math.min(
+          26,
+          Math.max(16, plain.length / 2)
+        );
+
+      const timer = setInterval(() => {
+        const progress = frame / totalFrames;
+        let index = 0;
+
+        element.textContent = plain
+          .split("")
+          .map(character => {
+            if (
+              character === " " ||
+              character === "\n"
+            ) {
+              return character;
+            }
+
+            const output =
+              index / plain.length < progress
+                ? character
+                : characters[
+                    Math.floor(
+                      Math.random() *
+                        characters.length
+                    )
+                  ];
+
+            index += 1;
+            return output;
+          })
+          .join("");
+
+        frame += 1;
+
+        if (frame > totalFrames) {
+          clearInterval(timer);
+          element.innerHTML = original;
+        }
+      }, 34);
+    }
+
+    const revealEls = document.querySelectorAll(
+      ".reveal, .reveal-left, .reveal-right, .reveal-mask"
+    );
+
+    if (
+      "IntersectionObserver" in window &&
+      !reduceMotion
+    ) {
+      const revealObserver =
+        new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) {
+              return;
+            }
+
+            entry.target.classList.add("in");
+
+            const heading =
+              entry.target.matches(
+                "[data-scramble]"
+              )
+                ? entry.target
+                : entry.target.querySelector(
+                    "[data-scramble]"
+                  );
+
+            scrambleHeading(heading);
+            revealObserver.unobserve(entry.target);
+          });
+        }, { threshold: .15 });
+
+      revealEls.forEach(element => {
+        revealObserver.observe(element);
+      });
+    } else {
+      revealEls.forEach(element => {
+        element.classList.add("in");
+      });
+    }
+
+    const navigationLinks =
+      document.querySelectorAll(
+        "[data-section-link]"
+      );
+
+    const navigationSections = [
+      "sobre",
+      "comecei",
+      "stack",
+      "trajetoria",
+      "projetos",
+      "tecnicas",
+      "contato"
+    ]
+      .map(id => document.getElementById(id))
+      .filter(Boolean);
+
+    if ("IntersectionObserver" in window) {
+      const navigationObserver =
+        new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) {
+              return;
+            }
+
+            navigationLinks.forEach(link => {
+              link.classList.toggle(
+                "active",
+                link.dataset.sectionLink ===
+                  entry.target.id
+              );
+            });
+          });
+        }, {
+          rootMargin: "-35% 0px -55% 0px",
+          threshold: 0
         });
-      }, { threshold: .15 });
-      revealEls.forEach(element => observer.observe(element));
-    } else { revealEls.forEach(element => element.classList.add("in")); }
 
-    const scrollEyes = document.querySelectorAll(".scroll-eye");
-    const eyeThresholds = [0.05, 0.12, 0.22, 0.34, 0.5];
-    let scrollEyesTicking = false;
+      navigationSections.forEach(section => {
+        navigationObserver.observe(section);
+      });
+    }
+
+    const rotatingDiscipline =
+      document.getElementById(
+        "rotatingDiscipline"
+      );
+
+    const disciplines = [
+      "interfaces",
+      "sistemas",
+      "produtos",
+      "experiências",
+      "soluções Web3"
+    ];
+
+    let disciplineIndex = 0;
+
+    if (rotatingDiscipline && !reduceMotion) {
+      setInterval(() => {
+        rotatingDiscipline.classList.add(
+          "changing"
+        );
+
+        setTimeout(() => {
+          disciplineIndex =
+            (disciplineIndex + 1) %
+            disciplines.length;
+          rotatingDiscipline.textContent =
+            disciplines[disciplineIndex];
+          rotatingDiscipline.classList.remove(
+            "changing"
+          );
+        }, 280);
+      }, 2300);
+    }
+
+    const counterBand =
+      document.getElementById("counterBand");
+    const counters =
+      document.querySelectorAll(".counter-num");
+    let countersStarted = false;
+
+    function startCounters() {
+      if (countersStarted) {
+        return;
+      }
+
+      countersStarted = true;
+
+      counters.forEach(counter => {
+        const target =
+          Number(counter.dataset.target);
+
+        if (reduceMotion) {
+          counter.textContent = target;
+          return;
+        }
+
+        const startedAt = performance.now();
+
+        function updateCounter(now) {
+          const progress =
+            Math.min(
+              (now - startedAt) / 900,
+              1
+            );
+
+          counter.textContent = Math.round(
+            target *
+              (1 - Math.pow(1 - progress, 3))
+          );
+
+          if (progress < 1) {
+            requestAnimationFrame(
+              updateCounter
+            );
+          }
+        }
+
+        requestAnimationFrame(updateCounter);
+      });
+    }
+
+    if (
+      counterBand &&
+      "IntersectionObserver" in window
+    ) {
+      const counterObserver =
+        new IntersectionObserver(entries => {
+          if (
+            entries.some(
+              entry => entry.isIntersecting
+            )
+          ) {
+            startCounters();
+            counterObserver.disconnect();
+          }
+        }, { threshold: .35 });
+
+      counterObserver.observe(counterBand);
+    } else {
+      startCounters();
+    }
+
+    const constellationMap =
+      document.getElementById(
+        "constellationMap"
+      );
+    const constellationSvg =
+      document.getElementById(
+        "constellationSvg"
+      );
+
+    const constellationConnections = [
+      [0, 1],
+      [1, 2],
+      [2, 3],
+      [3, 4],
+      [4, 5],
+      [5, 6],
+      [6, 7],
+      [7, 0],
+      [1, 6],
+      [2, 5],
+      [0, 2],
+      [3, 5]
+    ];
+
+    function buildConstellation() {
+      if (
+        !constellationMap ||
+        !constellationSvg
+      ) {
+        return;
+      }
+
+      const nodes = [
+        ...constellationMap.querySelectorAll(
+          ".constellation-node"
+        )
+      ];
+
+      const mapRect =
+        constellationMap.getBoundingClientRect();
+
+      constellationSvg.innerHTML = "";
+
+      constellationConnections.forEach(
+        (
+          [startIndex, endIndex],
+          connectionIndex
+        ) => {
+          const start = nodes[startIndex];
+          const end = nodes[endIndex];
+
+          if (!start || !end) {
+            return;
+          }
+
+          const startRect =
+            start.getBoundingClientRect();
+          const endRect =
+            end.getBoundingClientRect();
+          const line =
+            document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "line"
+            );
+
+          line.setAttribute(
+            "x1",
+            startRect.left +
+              startRect.width / 2 -
+              mapRect.left
+          );
+          line.setAttribute(
+            "y1",
+            startRect.top +
+              startRect.height / 2 -
+              mapRect.top
+          );
+          line.setAttribute(
+            "x2",
+            endRect.left +
+              endRect.width / 2 -
+              mapRect.left
+          );
+          line.setAttribute(
+            "y2",
+            endRect.top +
+              endRect.height / 2 -
+              mapRect.top
+          );
+          line.style.transitionDelay =
+            connectionIndex * 90 + "ms";
+
+          constellationSvg.appendChild(
+            line
+          );
+
+          const length =
+            line.getTotalLength();
+
+          line.style.strokeDasharray =
+            length;
+          line.style.strokeDashoffset =
+            reduceMotion ? 0 : length;
+        }
+      );
+    }
+
+    buildConstellation();
+
+    if (
+      "ResizeObserver" in window &&
+      constellationMap
+    ) {
+      const constellationResizeObserver =
+        new ResizeObserver(
+          buildConstellation
+        );
+
+      constellationResizeObserver.observe(
+        constellationMap
+      );
+    }
+
+    if (
+      constellationMap &&
+      "IntersectionObserver" in window &&
+      !reduceMotion
+    ) {
+      const constellationObserver =
+        new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) {
+              return;
+            }
+
+            constellationMap.classList.add(
+              "constellation-drawn"
+            );
+            constellationObserver.unobserve(
+              constellationMap
+            );
+          });
+        }, { threshold: .35 });
+
+      constellationObserver.observe(
+        constellationMap
+      );
+    } else if (constellationMap) {
+      constellationMap.classList.add(
+        "constellation-drawn"
+      );
+    }
+
+    document
+      .querySelectorAll(".faq-question")
+      .forEach(button => {
+        button.addEventListener(
+          "click",
+          () => {
+            const wasOpen =
+              button.getAttribute(
+                "aria-expanded"
+              ) === "true";
+
+            document
+              .querySelectorAll(
+                ".faq-question"
+              )
+              .forEach(otherButton => {
+                otherButton.setAttribute(
+                  "aria-expanded",
+                  "false"
+                );
+
+                const panel =
+                  document.getElementById(
+                    otherButton.getAttribute(
+                      "aria-controls"
+                    )
+                  );
+
+                if (panel) {
+                  panel.hidden = true;
+                }
+              });
+
+            if (!wasOpen) {
+              button.setAttribute(
+                "aria-expanded",
+                "true"
+              );
+
+              const panel =
+                document.getElementById(
+                  button.getAttribute(
+                    "aria-controls"
+                  )
+                );
+
+              if (panel) {
+                panel.hidden = false;
+              }
+            }
+          }
+        );
+      });
+
+    const canvas =
+      document.getElementById("embers");
+    const context =
+      canvas.getContext("2d");
+    let width = 0;
+    let height = 0;
+    let particles = [];
+
+    function resizeCanvas() {
+      const ratio = Math.min(
+        window.devicePixelRatio || 1,
+        2
+      );
+
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width * ratio;
+      canvas.height = height * ratio;
+      canvas.style.width = width + "px";
+      canvas.style.height = height + "px";
+      context.setTransform(
+        ratio,
+        0,
+        0,
+        ratio,
+        0,
+        0
+      );
+    }
+
+    function makeParticle(
+      randomY = false
+    ) {
+      return {
+        x: Math.random() * width,
+        y: randomY
+          ? Math.random() * height
+          : height + 10,
+        r: Math.random() * 1.6 + .4,
+        speed: Math.random() * .6 + .15,
+        drift: (Math.random() - .5) * .3,
+        life: Math.random() * .6 + .4,
+        hue:
+          Math.random() > .6
+            ? "201,169,97"
+            : "179,22,47"
+      };
+    }
+
+    function resetParticles() {
+      const particleCount =
+        window.innerWidth < 700
+          ? 28
+          : 55;
+
+      particles = Array.from(
+        { length: particleCount },
+        () => makeParticle(true)
+      );
+    }
+
+    function animateEmbers() {
+      context.clearRect(
+        0,
+        0,
+        width,
+        height
+      );
+
+      particles.forEach(particle => {
+        particle.y -= particle.speed;
+        particle.x += particle.drift;
+        context.beginPath();
+        context.arc(
+          particle.x,
+          particle.y,
+          particle.r,
+          0,
+          Math.PI * 2
+        );
+        context.fillStyle =
+          "rgba(" +
+          particle.hue +
+          "," +
+          particle.life * .5 +
+          ")";
+        context.fill();
+
+        if (particle.y < -10) {
+          Object.assign(
+            particle,
+            makeParticle()
+          );
+        }
+      });
+
+      requestAnimationFrame(
+        animateEmbers
+      );
+    }
+
+    resizeCanvas();
+
+    if (!reduceMotion) {
+      resetParticles();
+      animateEmbers();
+    }
+
+    const scrollEyes =
+      document.querySelectorAll(
+        ".scroll-eye"
+      );
+
+    const eyeThresholds = [
+      .035,
+      .08,
+      .14,
+      .22,
+      .32,
+      .44
+    ];
+
+    const siteHeader =
+      document.querySelector(
+        ".site-header"
+      );
+    const siteProgressBar =
+      document.getElementById(
+        "siteProgressBar"
+      );
+    const chaptersTimeline =
+      document.getElementById(
+        "chaptersTimeline"
+      );
+
+    let globalScrollFramePending =
+      false;
 
     function updateScrollEyes() {
-      const scrollableHeight = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
-      const scrollProgress = window.scrollY / scrollableHeight;
-      scrollEyes.forEach((eye, index) => {
-        const shouldShow = scrollProgress >= eyeThresholds[index];
-        eye.classList.toggle("visible", shouldShow);
+      const scrollableHeight =
+        Math.max(
+          document.documentElement
+            .scrollHeight -
+            window.innerHeight,
+          1
+        );
+
+      const scrollProgress =
+        window.scrollY /
+        scrollableHeight;
+
+      scrollEyes.forEach(
+        (eye, index) => {
+          eye.classList.toggle(
+            "visible",
+            scrollProgress >=
+              eyeThresholds[index]
+          );
+        }
+      );
+    }
+
+    function updateProgressBar() {
+      const maxScroll = Math.max(
+        document.documentElement
+          .scrollHeight -
+          window.innerHeight,
+        1
+      );
+
+      if (siteProgressBar) {
+        siteProgressBar.style.transform =
+          "scaleX(" +
+          Math.min(
+            window.scrollY / maxScroll,
+            1
+          ) +
+          ")";
+      }
+    }
+
+    function updateChaptersLine() {
+      if (!chaptersTimeline) {
+        return;
+      }
+
+      const bounds =
+        chaptersTimeline
+          .getBoundingClientRect();
+      const travel =
+        window.innerHeight * .72 -
+        bounds.top;
+      const progress = Math.max(
+        0,
+        Math.min(
+          travel /
+            Math.max(bounds.height, 1),
+          1
+        )
+      );
+
+      chaptersTimeline.style.setProperty(
+        "--chapter-progress",
+        progress * 100 + "%"
+      );
+    }
+
+    function updateGlobalScrollEffects() {
+      updateScrollEyes();
+      updateProgressBar();
+      updateChaptersLine();
+
+      if (siteHeader) {
+        siteHeader.classList.toggle(
+          "scrolled",
+          window.scrollY > 40
+        );
+      }
+
+      globalScrollFramePending = false;
+    }
+
+    function requestGlobalScrollUpdate() {
+      if (globalScrollFramePending) {
+        return;
+      }
+
+      globalScrollFramePending = true;
+      requestAnimationFrame(
+        updateGlobalScrollEffects
+      );
+    }
+
+    window.addEventListener(
+      "scroll",
+      requestGlobalScrollUpdate,
+      { passive: true }
+    );
+
+    window.addEventListener(
+      "resize",
+      () => {
+        resizeCanvas();
+
+        if (!reduceMotion) {
+          resetParticles();
+        }
+
+        requestGlobalScrollUpdate();
+      },
+      { passive: true }
+    );
+
+    updateGlobalScrollEffects();
+
+    let journeyCompletedFallback = false;
+    const contactSection =
+      document.getElementById("contato");
+    const journeyToast =
+      document.getElementById(
+        "journeyToast"
+      );
+    let journeyToastTimer = null;
+
+    function showJourneyToast() {
+      if (!journeyToast) {
+        return;
+      }
+
+      try {
+        if (
+          sessionStorage.getItem(
+            "portfolioJourneyCompleted"
+          ) === "1"
+        ) {
+          return;
+        }
+
+        sessionStorage.setItem(
+          "portfolioJourneyCompleted",
+          "1"
+        );
+      } catch {
+        if (journeyCompletedFallback) {
+          return;
+        }
+
+        journeyCompletedFallback = true;
+      }
+
+      journeyToast.classList.add(
+        "visible"
+      );
+      clearTimeout(journeyToastTimer);
+
+      journeyToastTimer = setTimeout(
+        () => {
+          journeyToast.classList.remove(
+            "visible"
+          );
+        },
+        3600
+      );
+    }
+
+    if (
+      contactSection &&
+      "IntersectionObserver" in window
+    ) {
+      const journeyObserver =
+        new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (
+              entry.isIntersecting &&
+              entry.intersectionRatio >= .75
+            ) {
+              showJourneyToast();
+              journeyObserver.unobserve(
+                contactSection
+              );
+            }
+          });
+        }, {
+          threshold: [.75, .9]
+        });
+
+      journeyObserver.observe(
+        contactSection
+      );
+    }
+
+    const soundToggle =
+      document.getElementById(
+        "soundToggle"
+      );
+    let soundEnabled = false;
+    let ritualAudioContext = null;
+
+    function getRitualAudioContext() {
+      if (!ritualAudioContext) {
+        const AudioContextClass =
+          window.AudioContext ||
+          window.webkitAudioContext;
+
+        if (!AudioContextClass) {
+          return null;
+        }
+
+        ritualAudioContext =
+          new AudioContextClass();
+      }
+
+      return ritualAudioContext;
+    }
+
+    function playRitualTone(
+      frequency = 170,
+      duration = .18
+    ) {
+      if (!soundEnabled) {
+        return;
+      }
+
+      const audioContext =
+        getRitualAudioContext();
+
+      if (!audioContext) {
+        return;
+      }
+
+      const oscillator =
+        audioContext.createOscillator();
+      const gain =
+        audioContext.createGain();
+
+      oscillator.type = "sine";
+      oscillator.frequency
+        .setValueAtTime(
+          frequency,
+          audioContext.currentTime
+        );
+      oscillator.frequency
+        .exponentialRampToValueAtTime(
+          Math.max(
+            60,
+            frequency * .58
+          ),
+          audioContext.currentTime +
+            duration
+        );
+      gain.gain.setValueAtTime(
+        .0001,
+        audioContext.currentTime
+      );
+      gain.gain
+        .exponentialRampToValueAtTime(
+          .08,
+          audioContext.currentTime + .02
+        );
+      gain.gain
+        .exponentialRampToValueAtTime(
+          .0001,
+          audioContext.currentTime +
+            duration
+        );
+      oscillator.connect(gain);
+      gain.connect(
+        audioContext.destination
+      );
+      oscillator.start();
+      oscillator.stop(
+        audioContext.currentTime +
+          duration
+      );
+    }
+
+    if (soundToggle) {
+      soundToggle.addEventListener(
+        "click",
+        async () => {
+          soundEnabled = !soundEnabled;
+
+          if (soundEnabled) {
+            const audioContext =
+              getRitualAudioContext();
+
+            if (
+              audioContext &&
+              audioContext.state ===
+                "suspended"
+            ) {
+              await audioContext.resume();
+            }
+
+            playRitualTone(220, .16);
+          }
+
+          soundToggle.setAttribute(
+            "aria-pressed",
+            String(soundEnabled)
+          );
+          soundToggle.textContent =
+            soundEnabled
+              ? "Som ritual: ligado"
+              : "Som ritual: desligado";
+        }
+      );
+    }
+
+    document
+      .querySelectorAll(
+        "[data-burn-seal]"
+      )
+      .forEach(link => {
+        link.addEventListener(
+          "click",
+          event => {
+            if (
+              link.dataset.sealing ===
+              "1"
+            ) {
+              return;
+            }
+
+            event.preventDefault();
+
+            const href = link.href;
+            const target = link.target;
+            link.dataset.sealing = "1";
+            link.classList.add("sealing");
+
+            let pendingWindow = null;
+
+            if (target === "_blank") {
+              pendingWindow = window.open(
+                "about:blank",
+                "_blank"
+              );
+            }
+
+            playRitualTone(180, .22);
+
+            setTimeout(() => {
+              if (pendingWindow) {
+                pendingWindow.location.href =
+                  href;
+              } else {
+                window.location.href = href;
+              }
+
+              link.classList.remove(
+                "sealing"
+              );
+              link.dataset.sealing = "0";
+            }, reduceMotion ? 40 : 400);
+          }
+        );
       });
-      scrollEyesTicking = false;
+
+    const konamiSequence = [
+      "ArrowUp",
+      "ArrowUp",
+      "ArrowDown",
+      "ArrowDown",
+      "ArrowLeft",
+      "ArrowRight",
+      "ArrowLeft",
+      "ArrowRight",
+      "b",
+      "a"
+    ];
+
+    const trueFormOverlay =
+      document.getElementById(
+        "trueFormOverlay"
+      );
+    let konamiIndex = 0;
+    let trueFormTimer = null;
+
+    function deactivateTrueForm() {
+      clearTimeout(trueFormTimer);
+      document.body.classList.remove(
+        "true-form"
+      );
+      trueFormOverlay.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+      konamiIndex = 0;
     }
 
-    window.addEventListener("scroll", () => {
-      if (scrollEyesTicking) return;
-      requestAnimationFrame(updateScrollEyes);
-      scrollEyesTicking = true;
-    }, { passive: true });
-
-    updateScrollEyes();
-
-    const canvas = document.getElementById("embers");
-    const context = canvas.getContext("2d");
-    let width = 0, height = 0, particles = [];
-    function resizeCanvas() {
-      const ratio = Math.min(window.devicePixelRatio || 1, 2);
-      width = window.innerWidth; height = window.innerHeight;
-      canvas.width = width * ratio; canvas.height = height * ratio;
-      canvas.style.width = width + "px"; canvas.style.height = height + "px";
-      context.setTransform(ratio, 0, 0, ratio, 0, 0);
+    function activateTrueForm() {
+      clearTimeout(trueFormTimer);
+      document.body.classList.add(
+        "true-form"
+      );
+      trueFormOverlay.setAttribute(
+        "aria-hidden",
+        "false"
+      );
+      playRitualTone(105, .5);
+      trueFormTimer = setTimeout(
+        deactivateTrueForm,
+        4000
+      );
     }
-    function makeParticle(randomY = false) { return { x: Math.random() * width, y: randomY ? Math.random() * height : height + 10, r: Math.random() * 1.6 + .4, speed: Math.random() * .6 + .15, drift: (Math.random() - .5) * .3, life: Math.random() * .6 + .4, hue: Math.random() > .6 ? "201,169,97" : "179,22,47" }; }
-    function animateEmbers() {
-      context.clearRect(0, 0, width, height);
-      particles.forEach(particle => {
-        particle.y -= particle.speed; particle.x += particle.drift;
-        context.beginPath(); context.arc(particle.x, particle.y, particle.r, 0, Math.PI * 2);
-        context.fillStyle = `rgba(${particle.hue},${particle.life * .5})`; context.fill();
-        if (particle.y < -10) Object.assign(particle, makeParticle());
-      });
-      requestAnimationFrame(animateEmbers);
+
+    document.addEventListener(
+      "keydown",
+      event => {
+        if (event.key === "Escape") {
+          endIntro();
+          deactivateTrueForm();
+          return;
+        }
+
+        const pressedKey =
+          event.key.length === 1
+            ? event.key.toLowerCase()
+            : event.key;
+        const expectedKey =
+          konamiSequence[konamiIndex];
+
+        if (pressedKey === expectedKey) {
+          konamiIndex += 1;
+
+          if (
+            konamiIndex ===
+            konamiSequence.length
+          ) {
+            activateTrueForm();
+            konamiIndex = 0;
+          }
+
+          return;
+        }
+
+        konamiIndex =
+          pressedKey === konamiSequence[0]
+            ? 1
+            : 0;
+      }
+    );
+
+    if (!reduceMotion) {
+      document.addEventListener(
+        "click",
+        event => {
+          if (
+            event.target.closest(
+              "a,button,input,textarea,select,summary,[role='button'],[data-no-ripple]"
+            )
+          ) {
+            return;
+          }
+
+          const ripple =
+            document.createElement("span");
+
+          ripple.className =
+            "click-ripple";
+          ripple.style.left =
+            event.clientX + "px";
+          ripple.style.top =
+            event.clientY + "px";
+          document.body.appendChild(
+            ripple
+          );
+
+          ripple.addEventListener(
+            "animationend",
+            () => ripple.remove(),
+            { once: true }
+          );
+        }
+      );
     }
-    resizeCanvas();
-    if (!reduceMotion) { particles = Array.from({ length: 55 }, () => makeParticle(true)); animateEmbers(); }
-    window.addEventListener("resize", resizeCanvas, { passive: true });
   </script>
 </body>
 </html>
